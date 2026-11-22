@@ -1,0 +1,2723 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#050810">
+<title>APPIS | PPSU Pisangan Baru</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+:root{--bg:#050810;--txt:#ffffff;--title:#ffffff;--accent:#facc15;--card-bg:rgba(255,255,255,0.03);--nav-bg:rgba(5,8,16,0.95);--glass-border:rgba(255,255,255,0.1);--success:#10b981;--warning:#f59e0b;--error:#ef4444}
+.light-mode{--bg:#f8fafc;--txt:#475569;--title:#1e293b;--accent:#0000ff;--card-bg:#ffffff;--nav-bg:rgba(255,255,255,0.98);--glass-border:rgba(13,5,242,0.1)}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Plus Jakarta Sans',sans-serif;scroll-behavior:smooth}
+body{background-color:var(--bg);color:var(--txt);transition:background-color .5s,color .5s;overflow-x:hidden;width:100%}
+
+#loader{position:fixed;inset:0;background:#050810;z-index:10000;display:flex;flex-direction:column;justify-content:center;align-items:center;transition:opacity .5s}
+.loader-logo{width:100px;height:100px;object-fit:contain;margin-bottom:20px;animation:pulseLogo 2s infinite}
+.loader-bar{width:200px;height:4px;background:rgba(255,255,255,.1);border-radius:10px;overflow:hidden}
+.loader-progress{width:0%;height:100%;background:var(--accent);transition:width .5s}
+@keyframes pulseLogo{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.08);opacity:.8}}
+
+#main-content{display:none}
+.login-modal{display:flex;position:fixed;inset:0;background:var(--bg);z-index:9000;justify-content:center;align-items:center;transition:opacity .5s;padding:20px;overflow-y:auto}
+.login-content{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:30px;padding:36px 28px;width:100%;max-width:410px;box-shadow:0 20px 50px rgba(0,0,0,.5);backdrop-filter:blur(20px);text-align:center}
+.login-logo{width:80px;height:80px;object-fit:contain;margin-bottom:10px}
+.btn-3d{width:100%;padding:14px;border-radius:12px;border:none;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:.2s;position:relative;font-size:.9rem}
+.btn-3d:hover{transform:translateY(-2px);filter:brightness(1.1)}
+.btn-3d:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.login-input{width:100%;padding:14px 18px;margin-bottom:12px;border-radius:12px;border:1px solid var(--glass-border);background:rgba(255,255,255,.05);color:var(--title);outline:none;transition:.3s;font-size:.9rem}
+.login-input:focus{border-color:var(--accent);background:rgba(255,255,255,.08)}
+select.login-input{color:white} select.login-input option{background:#0b1220;color:white}
+.light-mode select.login-input{color:var(--title)} .light-mode select.login-input option{background:#fff;color:#1e293b}
+
+.navbar{display:flex;justify-content:space-between;align-items:center;padding:0 5%;height:80px;background:var(--nav-bg);position:fixed;width:100%;top:0;left:0;z-index:2001;backdrop-filter:blur(10px);border-bottom:1px solid var(--glass-border)}
+.logo-area{display:flex;align-items:center;gap:12px;z-index:2005}
+.logo-img{width:38px;height:38px;object-fit:contain}
+.logo-text{font-weight:800;color:var(--title);font-size:1.15rem;letter-spacing:.5px}
+.nav-center-container{position:relative;flex:2;display:flex;justify-content:center;align-items:center;height:100%}
+.nav-links{display:flex;gap:4px;list-style:none;align-items:center;position:relative;z-index:10}
+.nav-item{padding:10px 14px;cursor:pointer;font-weight:600;border-radius:50px;transition:.3s;color:var(--txt);text-decoration:none;font-size:.85rem;white-space:nowrap}
+.nav-item.active{color:var(--accent)!important;background:rgba(250,204,21,.1)}
+.hanging-lamp{position:absolute;top:-30px;width:80px;display:flex;flex-direction:column;align-items:center;pointer-events:none;z-index:5;transition:left .5s cubic-bezier(.25,1,.5,1)}
+.cable{width:2px;height:35px;background:var(--cable-color)}
+.white-cone{width:30px;height:15px;background:#fa1100;clip-path:polygon(20% 0%,80% 0%,100% 100%,0% 100%)}
+.bulb{width:12px;height:12px;background:var(--accent);border-radius:50%;box-shadow:0 0 15px var(--accent);margin-top:-3px}
+.spotlight{width:120px;height:140px;background:radial-gradient(ellipse at top,var(--accent),transparent 70%);opacity:.15;clip-path:polygon(45% 0%,55% 0%,100% 100%,0% 100%);margin-top:-2px}
+
+.user-profile-wrapper{position:relative;display:flex;align-items:center;z-index:2005}
+.user-avatar{width:38px;height:38px;border-radius:50%;border:2px solid var(--accent);cursor:pointer;object-fit:cover;transition:.3s}
+.user-avatar:hover{transform:scale(1.05);box-shadow:0 0 10px var(--accent)}
+.user-dropdown{position:absolute;top:55px;right:0;background:var(--nav-bg);border:1px solid var(--glass-border);border-radius:15px;padding:15px;width:220px;display:none;flex-direction:column;text-align:center;backdrop-filter:blur(15px);box-shadow:0 10px 25px rgba(0,0,0,.5);transform:translateY(10px);opacity:0;transition:all .3s ease}
+.user-dropdown.show{display:flex;transform:translateY(0);opacity:1}
+.btn-logout{background:rgba(239,68,68,.1);color:var(--error);border:1px solid var(--error);padding:8px;border-radius:8px;cursor:pointer;font-weight:700;transition:.3s;display:flex;justify-content:center;align-items:center;gap:8px;margin-top:10px}
+.btn-logout:hover{background:var(--error);color:white}
+
+.hero-section{padding:140px 5% 60px;display:flex;align-items:center;position:relative}
+.hero-container{display:flex;align-items:center;gap:40px;width:100%;z-index:5}
+.hero-left{flex:1.2;position:relative}
+.badge-tag{display:inline-block;padding:6px 16px;border:1px solid var(--accent);color:var(--accent);border-radius:50px;font-size:.8rem;margin-bottom:15px;font-weight:600;letter-spacing:.5px}
+.hero-left h1{font-size:clamp(2.2rem,5vw,4.2rem);font-weight:900;color:var(--title);margin-bottom:20px;line-height:1.15}
+.hero-left h1 span{color:var(--accent)}
+.hero-desc{opacity:.85;line-height:1.7;max-width:540px;font-size:.95rem;margin-bottom:10px}
+.info-ticker{height:30px;position:relative;overflow:hidden;width:100%;margin-top:15px}
+.ticker-item{position:absolute;top:0;left:0;width:100%;opacity:0;animation:slideFade 9s infinite;display:flex;align-items:center;gap:10px;font-weight:700;font-size:.9rem}
+.ticker-item i{font-size:1.1rem}
+.ticker-item:nth-child(1){animation-delay:0s;color:var(--accent)}
+.ticker-item:nth-child(2){animation-delay:3s;color:var(--success)}
+.ticker-item:nth-child(3){animation-delay:6s;color:#38bdf8}
+@keyframes slideFade{0%{opacity:0;transform:translateY(15px)}10%,25%{opacity:1;transform:translateY(0)}33%,100%{opacity:0;transform:translateY(-15px)}}
+.hero-right{flex:1;display:flex;justify-content:center;perspective:1000px}
+.stage{position:relative;transform-style:preserve-3d}
+.profile-center{width:220px;height:220px;border-radius:50%;overflow:hidden;border:4px solid var(--accent);position:relative;z-index:10;box-shadow:0 0 30px rgba(250,204,21,0.3);background:#1e293b}
+.profile-center img{width:100%;height:100%;object-fit:cover}
+.ring{position:absolute;top:70%;left:50%;transform-style:preserve-3d;animation:rotate3D 18s linear infinite}
+.ring span{position:absolute;color:var(--accent);font-weight:800;font-size:.95rem;white-space:nowrap;transform-origin:center;text-transform:uppercase;letter-spacing:1px}
+@keyframes rotate3D{from{transform:rotateY(0deg)}to{transform:rotateY(360deg)}}
+
+.slider-header{display:flex;justify-content:space-between;align-items:center;padding:0 5%;margin-bottom:15px;margin-top:40px;flex-wrap:wrap;gap:12px}
+.section-title{font-size:1.3rem;font-weight:800;color:var(--title)}
+.slider-nav-btns{display:flex;gap:10px}
+.btn-slide{background:var(--card-bg);border:1px solid var(--glass-border);color:var(--txt);width:40px;height:40px;border-radius:50%;cursor:pointer;transition:.3s;display:flex;align-items:center;justify-content:center;font-size:.9rem}
+.btn-slide:hover{background:var(--accent);color:#000}
+.carousel-container{display:flex;overflow-x:auto;gap:20px;padding:10px 5% 30px;scrollbar-width:none;scroll-snap-type:x mandatory;scroll-behavior:smooth}
+.carousel-container::-webkit-scrollbar{display:none}
+.card-item{min-width:280px;width:280px;background:var(--card-bg);border-radius:20px;border:1px solid var(--glass-border);overflow:hidden;position:relative;transition:.3s;scroll-snap-align:start;flex-shrink:0}
+.card-img{width:100%;height:140px;background:#1e293b;object-fit:cover}
+.card-content{padding:20px}
+.card-tag{position:absolute;top:12px;left:12px;background:var(--error);color:white;padding:4px 12px;border-radius:8px;font-size:.7rem;font-weight:800}
+.card-title{font-weight:800;font-size:1.05rem;color:var(--title);margin-bottom:5px}
+
+.medsos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;padding:10px 5% 30px}
+.medsos-card{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:24px;padding:22px;backdrop-filter:blur(15px);display:flex;align-items:center;gap:18px;text-decoration:none;color:var(--txt);transition:all .3s ease;position:relative;overflow:hidden}
+.medsos-card:hover{transform:translateY(-5px);border-color:var(--accent);box-shadow:0 12px 30px rgba(0,0,0,.4)}
+.medsos-icon{width:58px;height:58px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:white;flex-shrink:0;transition:transform .3s}
+.medsos-card:hover .medsos-icon{transform:scale(1.1) rotate(5deg)}
+.icon-wa{background:#25D366;box-shadow:0 6px 20px rgba(37,211,102,.35)}
+.icon-ig{background:linear-gradient(45deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);box-shadow:0 6px 20px rgba(220,39,67,.35)}
+.medsos-info{flex:1}
+.medsos-title{font-weight:800;font-size:1.05rem;color:var(--title);margin-bottom:2px}
+.medsos-sub{font-size:.78rem;opacity:.7;font-weight:500}
+
+.crm-section{padding:40px 5%}
+.crm-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;flex-wrap:wrap;gap:15px}
+.crm-feed{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:25px}
+.crm-card{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:20px;padding:20px;backdrop-filter:blur(15px);display:flex;flex-direction:column;justify-content:space-between;transition:transform .3s;position:relative}
+.crm-card:hover{transform:translateY(-5px)}
+.crm-badge{display:inline-block;padding:4px 12px;border-radius:50px;font-size:.7rem;font-weight:800;text-transform:uppercase;margin-bottom:12px;width:fit-content}
+.badge-proses{background:rgba(245,158,11,.2);color:var(--warning);border:1px solid var(--warning)}
+.badge-selesai{background:rgba(16,185,129,.2);color:var(--success);border:1px solid var(--success)}
+
+.apps-section{padding:20px 5% 100px}
+.apps-container{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:30px;padding:30px;backdrop-filter:blur(10px)}
+.apps-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:25px 15px;max-height:140px;overflow:hidden;transition:max-height .5s ease}
+.apps-grid.expanded{max-height:2000px}
+.app-item{display:flex;flex-direction:column;align-items:center;text-decoration:none;gap:10px;transition:.3s;cursor:pointer}
+.app-item:hover .icon-box{transform:translateY(-5px);border-color:var(--accent)}
+.icon-box{width:75px;height:75px;background:rgba(255,255,255,.05);border:1px solid var(--glass-border);border-radius:22px;display:flex;align-items:center;justify-content:center;position:relative;transition:.3s}
+.icon-box img{width:42px;height:42px;object-fit:contain}
+.app-label{font-size:.75rem;color:var(--txt);font-weight:600;text-align:center}
+
+#app-viewer{position:fixed;inset:0;background:var(--bg);z-index:9999;display:none;flex-direction:column}
+.viewer-header{height:60px;background:var(--nav-bg);display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid var(--glass-border)}
+.btn-back-home{background:rgba(255,255,255,.1);border:1px solid var(--glass-border);color:var(--title);padding:8px 16px;border-radius:10px;cursor:pointer;font-weight:600;display:flex;align-items:center;gap:8px;transition:.3s}
+.btn-back-home:hover{background:var(--accent);color:#000}
+#app-iframe{flex:1;border:none;width:100%;height:100%;background:#fff}
+
+.bottom-nav{position:fixed;bottom:0;left:0;width:100%;height:70px;background:#050810;display:none;justify-content:space-around;align-items:center;border-top:1px solid rgba(255,255,255,.05);z-index:2010;box-shadow:0 -4px 20px rgba(0,0,0,.5);transition:transform .3s}
+.light-mode .bottom-nav{background:#fff;border-top:1px solid #e2e8f0}
+.bnav-item{display:flex;flex-direction:column;align-items:center;justify-content:center;text-decoration:none;color:#64748b;font-size:.66rem;font-weight:600;flex:1;height:100%;transition:.3s}
+.bnav-item i{font-size:1.25rem;margin-bottom:4px;transition:.3s}
+.bnav-item.active{color:var(--accent)}
+.bnav-item.active i{transform:scale(1.15) translateY(-2px)}
+
+.custom-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;justify-content:center;align-items:center;padding:20px;backdrop-filter:blur(8px)}
+.modal-body{background:var(--bg);border:1px solid var(--glass-border);border-radius:25px;padding:25px;width:100%;max-width:520px;max-height:92vh;overflow-y:auto}
+.modal-close{background:none;border:none;color:var(--txt);font-size:1.4rem;cursor:pointer;opacity:.6;transition:.2s}
+.modal-close:hover{opacity:1;color:var(--error)}
+
+.request-feed{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px;padding:10px 5% 30px}
+.request-card{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:20px;padding:20px;position:relative;transition:.3s;cursor:pointer}
+.request-card:hover{transform:translateY(-3px);border-color:var(--accent)}
+.request-card.urgent{border-left:4px solid var(--error)}
+.request-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+.request-id{font-size:.7rem;opacity:.6;font-weight:700;letter-spacing:.5px}
+.request-status{padding:4px 12px;border-radius:50px;font-size:.7rem;font-weight:800;text-transform:uppercase}
+.status-pending{background:rgba(239,68,68,.15);color:var(--error);border:1px solid var(--error)}
+.status-accepted{background:rgba(245,158,11,.15);color:var(--warning);border:1px solid var(--warning)}
+.status-progress{background:rgba(56,189,248,.15);color:#38bdf8;border:1px solid #38bdf8}
+.status-pending_validation{background:rgba(168,85,247,.15);color:#a855f7;border:1px solid #a855f7}
+.status-done{background:rgba(16,185,129,.15);color:var(--success);border:1px solid var(--success)}
+.request-cat{font-size:.8rem;color:var(--accent);font-weight:700;margin-bottom:6px}
+.request-title{font-size:1rem;color:var(--title);font-weight:800;margin-bottom:8px}
+.request-desc{font-size:.85rem;opacity:.8;line-height:1.5;margin-bottom:12px}
+.request-meta{display:flex;gap:14px;font-size:.72rem;opacity:.65;margin-bottom:12px;flex-wrap:wrap}
+.request-meta i{margin-right:4px;color:var(--accent)}
+.request-photo{width:100%;height:140px;border-radius:12px;object-fit:cover;margin-bottom:12px;border:1px solid var(--glass-border); background:#1e293b;}
+.request-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.req-btn{flex:1;min-width:100px;padding:8px 12px;border-radius:10px;border:none;cursor:pointer;font-weight:700;font-size:.75rem;transition:.2s;display:flex;align-items:center;justify-content:center;gap:6px}
+.req-btn.primary{background:var(--accent);color:#000}
+.req-btn.success{background:var(--success);color:white}
+.req-btn.danger{background:var(--error);color:white}
+.req-btn.ghost{background:rgba(255,255,255,.05);color:var(--txt);border:1px solid var(--glass-border)}
+.req-btn:hover{transform:translateY(-2px);filter:brightness(1.1)}
+
+.workflow-steps{position:relative;padding-left:28px;margin:20px 0}
+.workflow-steps::before{content:'';position:absolute;left:9px;top:10px;bottom:10px;width:2px;background:var(--glass-border)}
+.workflow-step{position:relative;padding-bottom:20px;font-size:.82rem}
+.workflow-step:last-child{padding-bottom:0}
+.workflow-step::before{content:'';position:absolute;left:-27px;top:2px;width:14px;height:14px;border-radius:50%;background:var(--glass-border);border:2px solid var(--bg);z-index:2}
+.workflow-step.done::before{background:var(--success)}
+.workflow-step.active::before{background:var(--accent);animation:pulseStep 1.5s infinite}
+@keyframes pulseStep{0%,100%{box-shadow:0 0 0 0 rgba(250,204,21,0.6)}50%{box-shadow:0 0 0 6px rgba(250,204,21,0)}}
+.workflow-step .step-label{font-weight:800;color:var(--txt)}
+.workflow-step.done .step-label{color:var(--success)}
+.workflow-step.active .step-label{color:var(--accent)}
+
+.photo-container { margin-bottom: 15px; background: rgba(255,255,255,0.02); padding: 12px; border-radius: 12px; border: 1px solid var(--glass-border); }
+.photo-label { font-size: 0.75rem; font-weight: 800; color: var(--accent); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;}
+.photo-preview { width: 100%; max-height: 250px; object-fit: contain; border-radius: 8px; background: #0b1220; border: 1px solid var(--glass-border);}
+
+.absensi-card{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:24px;padding:20px;text-align:center;max-width:500px;margin:0 auto}
+.absensi-date{font-size:.85rem;opacity:.7;margin-bottom:8px;font-weight:600}
+.absensi-time{font-size:2.5rem;font-weight:900;color:var(--accent);margin-bottom:20px;font-family:'Poppins',sans-serif;letter-spacing:2px}
+
+.camera-container{position:relative;width:100%;aspect-ratio:4/3;background:#000;border-radius:16px;overflow:hidden;margin-bottom:15px;border:2px solid var(--glass-border);}
+.camera-container video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);}
+.camera-container.rear-cam video{transform:none;}
+.camera-container img{width:100%;height:100%;object-fit:cover;}
+.camera-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;color:#94a3b8;background:#0b1220;}
+.camera-placeholder i{font-size:2.5rem;margin-bottom:10px;opacity:0.5;}
+
+.cam-live-hud{position:absolute;left:10px;right:10px;bottom:10px;background:rgba(5,8,16,0.78);backdrop-filter:blur(6px);border:1px solid rgba(250,204,21,0.4);border-radius:10px;padding:8px 10px;color:#fff;font-size:.68rem;line-height:1.45;pointer-events:none;z-index:5;text-align:left}
+.cam-live-hud .hud-top{display:flex;justify-content:space-between;align-items:center;color:#facc15;font-weight:800;margin-bottom:2px}
+.cam-rec-dot{display:inline-block;width:7px;height:7px;background:#ef4444;border-radius:50%;margin-right:5px;animation:blinkRec 1s infinite}
+@keyframes blinkRec{0%,100%{opacity:1}50%{opacity:.2}}
+
+.absensi-buttons{display:flex;gap:12px;margin-bottom:20px}
+.absensi-btn{flex:1;padding:14px;border-radius:14px;border:none;cursor:pointer;font-weight:800;font-size:.9rem;transition:.3s;display:flex;flex-direction:column;align-items:center;gap:6px}
+.absensi-btn.in{background:var(--success);color:white}
+.absensi-btn.out{background:var(--error);color:white}
+.absensi-btn:disabled{opacity:.4;cursor:not-allowed}
+.absensi-btn i{font-size:1.5rem}
+.absensi-status{padding:12px;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid var(--glass-border);font-size:.85rem;margin-bottom:16px}
+.absensi-log{text-align:left;max-height:350px;overflow-y:auto}
+.absensi-row{display:flex;justify-content:space-between;padding:12px;border-bottom:1px solid var(--glass-border);font-size:.82rem;gap:10px;align-items:center;}
+.absensi-row:last-child{border-bottom:none}
+
+.jadwal-filter{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.jadwal-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.jadwal-table th{text-align:left;padding:10px 12px;border-bottom:2px solid var(--glass-border);color:var(--accent);font-weight:800;font-size:.72rem;text-transform:uppercase;letter-spacing:.5px}
+.jadwal-table td{padding:12px;border-bottom:1px solid var(--glass-border)}
+.jadwal-table .today-row td{background:rgba(250,204,21,.08)}
+.shift-badge{display:inline-block;padding:3px 10px;border-radius:6px;font-size:.7rem;font-weight:700}
+.shift-pagi{background:rgba(250,204,21,.15);color:var(--accent)}
+.shift-siang{background:rgba(245,158,11,.15);color:var(--warning)}
+.shift-malam{background:rgba(56,189,248,.15);color:#38bdf8}
+
+/* ============ VISUALISASI GRAFIK 3D CREDIT SCORE PETUGAS ============ */
+.credit-section{padding:20px 5% 30px}
+.credit-shell{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:28px;padding:22px;backdrop-filter:blur(16px);position:relative;overflow:hidden}
+.credit-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.period-tabs{display:inline-flex;background:rgba(255,255,255,.04);border:1px solid var(--glass-border);border-radius:14px;padding:4px;gap:4px}
+.period-tab{background:transparent;border:none;color:var(--txt);padding:8px 14px;border-radius:10px;font-size:.78rem;font-weight:700;cursor:pointer;transition:.25s}
+.period-tab.active{background:var(--accent);color:#000}
+.credit-grid-layout{display:grid;grid-template-columns:1.35fr 1fr;gap:20px;align-items:stretch}
+.canvas-3d-box{position:relative;width:100%;height:390px;border-radius:22px;overflow:hidden;border:1px solid var(--glass-border);background:radial-gradient(circle at 50% 25%,rgba(250,204,21,.12),rgba(5,8,16,.92) 75%);touch-action:none;cursor:grab}
+.light-mode .canvas-3d-box{background:radial-gradient(circle at 50% 25%,rgba(0,0,255,.08),rgba(241,245,249,.95) 75%)}
+.canvas-3d-box:active{cursor:grabbing}
+#creditScore3dCanvas{display:block;width:100%;height:100%}
+.canvas-3d-hud-top{position:absolute;top:12px;left:12px;right:12px;display:flex;justify-content:space-between;align-items:center;gap:8px;pointer-events:none;z-index:5;flex-wrap:wrap}
+.hud-pill{background:rgba(5,8,16,.78);border:1px solid rgba(255,255,255,.14);color:#fff;padding:5px 11px;border-radius:50px;font-size:.7rem;font-weight:700;backdrop-filter:blur(8px);display:inline-flex;align-items:center;gap:6px}
+.canvas-3d-controls{position:absolute;bottom:12px;right:12px;display:flex;gap:8px;z-index:6}
+.btn-3d-mini{background:rgba(5,8,16,.82);border:1px solid rgba(255,255,255,.18);color:#fff;padding:7px 12px;border-radius:10px;font-size:.72rem;font-weight:700;cursor:pointer;backdrop-filter:blur(8px);display:flex;align-items:center;gap:6px;transition:.2s}
+.btn-3d-mini:hover{border-color:var(--accent);color:var(--accent)}
+.canvas-3d-hint{position:absolute;bottom:14px;left:14px;font-size:.68rem;color:rgba(255,255,255,.7);background:rgba(5,8,16,.65);padding:5px 10px;border-radius:8px;pointer-events:none}
+
+.credit-side-panel{display:flex;flex-direction:column;gap:12px;max-height:390px}
+.credit-audit-card{background:rgba(255,255,255,.03);border:1px solid var(--glass-border);border-radius:18px;padding:14px 16px}
+.credit-rank-list{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding-right:4px}
+.credit-rank-item{background:rgba(255,255,255,.025);border:1px solid var(--glass-border);border-radius:14px;padding:11px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;transition:.25s}
+.credit-rank-item:hover,.credit-rank-item.selected{border-color:var(--accent);background:rgba(250,204,21,.08)}
+.rank-num{width:28px;height:28px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.78rem;flex-shrink:0}
+.rank-1{background:rgba(250,204,21,.22);color:var(--accent);border:1px solid var(--accent)}
+.rank-2{background:rgba(56,189,248,.18);color:#38bdf8;border:1px solid #38bdf8}
+.rank-3{background:rgba(16,185,129,.18);color:var(--success);border:1px solid var(--success)}
+.rank-other{background:rgba(255,255,255,.06);color:var(--txt)}
+.audit-metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+.audit-metric{background:rgba(255,255,255,.03);border:1px solid var(--glass-border);border-radius:10px;padding:7px 8px;text-align:center}
+.audit-metric .m-val{font-size:.95rem;font-weight:900;color:var(--title)}
+.audit-metric .m-lbl{font-size:.63rem;opacity:.7;line-height:1.2}
+.formula-drawer{margin-top:14px;background:rgba(250,204,21,.06);border:1px dashed rgba(250,204,21,.35);border-radius:16px;padding:14px 16px;font-size:.76rem;line-height:1.65;display:none}
+.formula-drawer.open{display:block}
+
+/* ============ LAPORAN KERJA REAL-TIME & PORTAL PUBLIK ============ */
+.laporan-card{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:22px;overflow:hidden;display:flex;flex-direction:column;transition:all .3s ease;position:relative}
+.laporan-card:hover{transform:translateY(-4px);border-color:var(--accent);box-shadow:0 14px 30px rgba(0,0,0,.35)}
+.laporan-img-wrap{position:relative;width:100%;height:210px;background:#0b1220;overflow:hidden;cursor:pointer}
+.laporan-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
+.laporan-card:hover .laporan-img-wrap img{transform:scale(1.03)}
+.laporan-live-pill{position:absolute;top:12px;left:12px;background:rgba(16,185,129,.92);color:#fff;padding:4px 10px;border-radius:50px;font-size:.66rem;font-weight:800;letter-spacing:.4px;display:flex;align-items:center;gap:5px;backdrop-filter:blur(6px)}
+.laporan-warn-pill{position:absolute;top:12px;left:12px;background:rgba(239,68,68,.92);color:#fff;padding:4px 10px;border-radius:50px;font-size:.66rem;font-weight:800;letter-spacing:.4px;display:flex;align-items:center;gap:5px;backdrop-filter:blur(6px)}
+.laporan-cat-pill{position:absolute;top:12px;right:12px;background:rgba(5,8,16,.85);color:var(--accent);border:1px solid rgba(250,204,21,.4);padding:4px 10px;border-radius:50px;font-size:.66rem;font-weight:800}
+.laporan-body{padding:18px;display:flex;flex-direction:column;flex:1;justify-content:space-between}
+.laporan-meta-grid{display:grid;grid-template-columns:1fr;gap:6px;background:rgba(255,255,255,.03);border:1px solid var(--glass-border);border-radius:12px;padding:10px 12px;font-size:.74rem;margin-top:10px}
+.laporan-meta-row{display:flex;align-items:flex-start;gap:8px;opacity:.9}
+.laporan-meta-row i{color:var(--accent);width:14px;margin-top:2px;flex-shrink:0}
+
+/* Portal Publik Standalone (Tanpa Login) */
+#publicReportPortal{display:none;min-height:100vh;background:var(--bg);padding-bottom:60px}
+.public-topbar{position:sticky;top:0;z-index:2005;background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--glass-border);padding:14px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.public-hero{padding:36px 5% 20px;background:radial-gradient(circle at top right,rgba(250,204,21,.12),transparent 60%)}
+.public-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:20px}
+.stat-pill-box{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:16px;padding:14px 16px}
+.stat-pill-box .val{font-size:1.4rem;font-weight:900;color:var(--accent)}
+.stat-pill-box .lbl{font-size:.72rem;opacity:.7;font-weight:600}
+
+#toast-container{position:fixed;top:90px;right:20px;z-index:99999;display:flex;flex-direction:column;gap:10px;pointer-events:none;max-width:340px}
+.toast{background:var(--nav-bg);border:1px solid var(--glass-border);border-left:4px solid var(--accent);padding:14px 18px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.4);backdrop-filter:blur(20px);color:var(--title);font-size:.85rem;font-weight:600;display:flex;align-items:center;gap:10px;animation:toastIn .3s cubic-bezier(.34,1.56,.64,1);pointer-events:auto;max-width:100%}
+.toast.success{border-left-color:var(--success)} .toast.error{border-left-color:var(--error)} .toast.warning{border-left-color:var(--warning)}
+@keyframes toastIn{from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}
+.toast.leaving{animation:toastOut .3s forwards} @keyframes toastOut{to{transform:translateX(120%);opacity:0}}
+.empty-state{grid-column:1/-1;text-align:center;padding:40px 20px;border:1px dashed var(--glass-border);border-radius:20px}
+.empty-state i{font-size:3rem;color:var(--accent);opacity:.5;margin-bottom:15px}
+.search-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px;padding:0 5%}
+.search-bar input,.search-bar select{padding:10px 14px;border-radius:12px;border:1px solid var(--glass-border);background:rgba(255,255,255,.05);color:var(--title);font-size:.85rem;outline:none}
+.search-bar input{flex:1;min-width:200px}
+.role-hidden{display:none!important}
+
+@media (max-width:960px){
+  .credit-grid-layout{grid-template-columns:1fr}
+  .canvas-3d-box{height:330px}
+  .credit-side-panel{max-height:none}
+}
+@media (max-width:900px){
+  .nav-center-container{display:none} .bottom-nav{display:flex!important} body.logged-in{padding-bottom:80px}
+  .hero-container{flex-direction:column-reverse;text-align:center;gap:30px} .hero-section{padding:110px 5% 40px}
+  .hero-left h1{font-size:2.5rem} .hero-desc{margin:0 auto 10px}
+  .info-ticker{margin-top:15px;display:flex;justify-content:center;text-align:center} .ticker-item{justify-content:center}
+  .apps-grid{grid-template-columns:repeat(4,1fr)} .search-bar, .slider-header {padding: 0 20px;}
+}
+@media (max-width:600px){
+  .hero-left h1{font-size:2rem} .apps-grid{grid-template-columns:repeat(3,1fr)}
+  .icon-box{width:65px;height:65px} .icon-box img{width:36px;height:36px} .card-item{min-width:250px;width:250px}
+  .login-content{padding:28px 20px} .medsos-grid{grid-template-columns:1fr} .absensi-time{font-size:2rem}
+  .request-feed {padding: 10px 20px 30px;} .canvas-3d-box{height:290px}
+}
+</style>
+</head>
+<body class="dark-mode">
+
+<div id="loader">
+  <img src="logoappis.png" class="loader-logo" alt="Logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1042/1042339.png'">
+  <div class="loader-bar"><div class="loader-progress" id="progress"></div></div>
+  <p style="margin-top:15px;font-size:.65rem;letter-spacing:4px;opacity:.8;font-weight:800;color:white;">APPIS MOBILE - PISANGAN BARU</p>
+</div>
+
+<!-- LOGIN MODAL + AKSES PORTAL LAPORAN KERJA PUBLIK -->
+<div id="loginSection" class="login-modal">
+  <div class="login-content">
+    <img src="logoappis.png" class="login-logo" alt="Logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1042/1042339.png'">
+    <h2 style="font-weight:800;color:var(--title);font-size:1.5rem;">APPIS MOBILE</h2>
+    <p style="font-size:.85rem;opacity:.7;margin-bottom:20px;color:var(--txt);">Silakan Login Akun Anda</p>
+    <form id="loginForm" onsubmit="handleAdminLogin(event)">
+      <input type="email" id="username" class="login-input" placeholder="Masukkan Email Akun" autocomplete="username" required>
+      <div style="position:relative">
+        <input type="password" id="password" class="login-input" placeholder="Masukkan Password" autocomplete="current-password" style="padding-right:45px" required>
+        <i class="fas fa-eye" id="togglePw" style="position:absolute;right:16px;top:16px;cursor:pointer;opacity:.6"></i>
+      </div>
+      <button type="submit" id="btnLoginSubmit" class="btn-3d" style="background:var(--accent);color:#000;margin-top:10px;">MASUK</button>
+    </form>
+
+    <div style="display:flex;align-items:center;gap:10px;margin:18px 0 14px;opacity:.45;font-size:.72rem;">
+      <div style="flex:1;height:1px;background:var(--glass-border);"></div>
+      <span>TRANSPARANSI PUBLIK</span>
+      <div style="flex:1;height:1px;background:var(--glass-border);"></div>
+    </div>
+
+    <button type="button" onclick="openPublicPortal()" class="btn-3d" style="background:rgba(16,185,129,0.14);color:var(--success);border:1px solid var(--success);">
+      <i class="fas fa-globe-asia"></i> Lihat Laporan Kerja Publik
+    </button>
+    <p style="font-size:.7rem;opacity:.6;margin-top:8px;">Pantau dokumentasi real-time petugas PPSU tanpa perlu login</p>
+  </div>
+</div>
+
+<!-- ============ PORTAL PUBLIK LAPORAN KERJA (TANPA LOGIN) ============ -->
+<div id="publicReportPortal">
+  <div class="public-topbar">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <img src="logoappis.png" alt="Logo" class="logo-img" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1042/1042339.png'">
+      <div>
+        <div style="font-weight:800;color:var(--title);font-size:1rem;">LAPORAN KERJA PPSU</div>
+        <div style="font-size:.7rem;color:var(--accent);font-weight:700;">Kelurahan Pisangan Baru • Transparansi Publik</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button type="button" onclick="copyPublicLink()" class="btn-back-home" title="Salin Link Publik"><i class="fas fa-share-alt"></i> Bagikan</button>
+      <button type="button" onclick="closePublicPortal()" class="btn-3d" style="background:var(--accent);color:#000;width:auto;padding:8px 16px;font-size:.8rem;"><i class="fas fa-sign-in-alt"></i> Login Petugas</button>
+    </div>
+  </div>
+
+  <div class="public-hero">
+    <div class="badge-tag"><i class="fas fa-satellite-dish"></i> LAPORAN KERJA REALTIME</div>
+    <h1 style="font-size:clamp(1.6rem,4vw,2.6rem);font-weight:900;color:var(--title);margin-bottom:8px;">Dokumentasi Kinerja Lapangan <span style="color:var(--accent);">PPSU Pisbar</span></h1>
+    <p style="font-size:.88rem;opacity:.8;max-width:650px;line-height:1.6;">Seluruh laporan Realtime untuk Transparansi Publik.</p>
+    <div class="public-stats" id="publicStatsBar">
+      <div class="stat-pill-box"><div class="val" id="pubStatTotal">0</div><div class="lbl">Total Laporan</div></div>
+      <div class="stat-pill-box"><div class="val" id="pubStatToday" style="color:var(--success);">0</div><div class="lbl">Laporan Hari Ini</div></div>
+      <div class="stat-pill-box"><div class="val" id="pubStatLast" style="font-size:.95rem;padding-top:6px;">-</div><div class="lbl">Update Terakhir</div></div>
+    </div>
+  </div>
+
+  <div class="search-bar" style="margin-top:10px;">
+    <input type="text" id="publicLaporanSearch" placeholder="🔍 Cari lokasi, kegiatan, nama petugas...">
+    <select id="publicLaporanKategori">
+      <option value="">Semua Bidang Kerja</option>
+      <option>Penanganan Kebersihan</option>
+      <option>Pemeliharaan Saluran / Got</option>
+      <option>Pengangkutan Sampah</option>
+      <option>Penataan Kawasan / Taman</option>
+      <option>Pemangkasan Pohon / Ranting</option>
+      <option>Tanggap Darurat / Banjir</option>
+    </select>
+    <button class="btn-slide" onclick="fetchLaporanKerja(true)" title="Refresh Data" style="width:auto;padding:0 14px;border-radius:12px;"><i class="fas fa-sync-alt"></i></button>
+  </div>
+
+  <div class="request-feed" id="publicLaporanFeed"></div>
+</div>
+
+<!-- ============ MAIN AUTHENTICATED APP ============ -->
+<div id="main-content">
+  <nav class="navbar">
+    <div class="logo-area">
+      <img src="logoappis.png" alt="Logo" class="logo-img" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1042/1042339.png'">
+      <span class="logo-text">APPIS MOBILE</span>
+    </div>
+    <div class="nav-center-container">
+      <div id="lamp-indicator" class="hanging-lamp"><div class="cable"></div><div class="white-cone"></div><div class="bulb"></div><div class="spotlight"></div></div>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#" class="nav-item active" onclick="handleNavClick(event,this)">Beranda</a></li>
+        <li><a href="#projects" class="nav-item" onclick="handleNavClick(event,this)">Program</a></li>
+        <li><a href="#credit-score-section" class="nav-item" onclick="handleNavClick(event,this)">Credit Score </a></li>
+        <li><a href="#laporan-kerja" class="nav-item" onclick="handleNavClick(event,this)">Laporan Kerja</a></li>
+        <li><a href="#layanan" class="nav-item" onclick="handleNavClick(event,this)">Koordinasi</a></li>
+        <li><a href="#informasi" class="nav-item" onclick="handleNavClick(event,this)">Informasi</a></li>
+        <li><a href="#tools" class="nav-item" onclick="handleNavClick(event,this)">Alat</a></li>
+      </ul>
+    </div>
+    <div class="nav-right" style="display:flex;gap:20px;align-items:center;">
+      <div id="mode-toggle" style="cursor:pointer;font-size:1.3rem;"><i class="fas fa-moon"></i></div>
+      <div class="user-profile-wrapper" id="profile-btn">
+        <img src="admin.jpg" alt="User" class="user-avatar" id="avatar-img" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
+        <div class="user-dropdown" id="user-dropdown">
+          <p id="userDisplayName" style="font-size:.85rem;font-weight:bold;color:var(--title);margin-bottom:3px;">Petugas PPSU</p>
+          <p id="userDisplayRole" style="font-size:.7rem;color:var(--accent);font-weight:600;">Tim Lapangan</p>
+          <button class="btn-logout" onclick="handleLogout(event)"><i class="fas fa-sign-out-alt"></i> Keluar</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero-section">
+    <div class="hero-container">
+      <div class="hero-left">
+        <div class="badge-tag">Kelurahan Pisangan Baru</div>
+        <h1>Aplikasi <span>PPSU</span> Pisangan Baru</h1>
+        <p class="hero-desc">APPIS MOBILE Sistem manajemen PPSU Pisbar.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;margin-bottom:10px;">
+          <button type="button" onclick="openLaporanKerjaForm()" class="btn-3d" style="background:var(--accent);color:#000;width:auto;padding:11px 18px;font-size:.82rem;">
+            <i class="fas fa-camera"></i> Lapor Kerja Real-Time
+          </button>
+          <button type="button" onclick="copyPublicLink()" class="btn-3d" style="background:rgba(16,185,129,.15);color:var(--success);border:1px solid var(--success);width:auto;padding:11px 16px;font-size:.82rem;">
+            <i class="fas fa-globe"></i> Link Publik
+          </button>
+        </div>
+        <div class="info-ticker">
+          <div class="ticker-item"><i class=""></i> Kebersihan Adalah Sebagian Dari Iman</div>
+          <div class="ticker-item"><i class=""></i> Mari Bersama Kita Menjaga Lingkungan Pisbar</div>
+          <div class="ticker-item"><i class=""></i> Mulai dari Rumah Pilah Sampah</div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="stage">
+          <div class="profile-center"><img src="logoappis.png" alt="Profile" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'"></div>
+          <div id="ring" class="ring"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="slider-header" id="projects">
+    <div><h2 class="section-title">Bidang Operasional</h2><span style="font-size:.75rem;opacity:.5;font-weight:600;">Fokus Utama Penanganan Wilayah</span></div>
+    <div class="slider-nav-btns">
+      <button id="layanan-prev" class="btn-slide"><i class="fas fa-chevron-left"></i></button>
+      <button id="layanan-next" class="btn-slide"><i class="fas fa-chevron-right"></i></button>
+    </div>
+  </div>
+  <div class="carousel-container" id="layanan-slider">
+    <div class="card-item"><span class="card-tag">Rutin</span><div class="card-img" style="background:url('gambar1.jpg') center/cover,#1e293b;"></div><div class="card-content"><h3 class="card-title">Penanganan Kebersihan</h3></div></div>
+    <div class="card-item"><span class="card-tag" style="background:var(--success);">Siaga</span><div class="card-img" style="background:url('gambar2.jpg') center/cover,#1e293b;"></div><div class="card-content"><h3 class="card-title">Pemeliharaan Saluran</h3></div></div>
+    <div class="card-item"><span class="card-tag">Periodik</span><div class="card-img" style="background:url('gambar3.jpg') center/cover,#1e293b;"></div><div class="card-content"><h3 class="card-title">Penataan Kawasan</h3></div></div>
+    <div class="card-item"><span class="card-tag">Khusus</span><div class="card-img" style="background:url('gambar5.jpg') center/cover,#1e293b;"></div><div class="card-content"><h3 class="card-title">Pengangkutan Sampah</h3></div></div>
+  </div>
+
+  <!-- ============ VISUALISASI GRAFIK 3D CREDIT SCORE PETUGAS (SKOR DASAR 0 & AUDIT JARAK >= 30M) ============ -->
+  <section id="credit-score-section" class="credit-section">
+    <div class="credit-shell">
+      <div class="credit-toolbar">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <h2 class="section-title"><i class="fas fa-cubes" style="color:var(--accent);"></i> Grafik Credit Score Petugas</h2>
+            <span style="background:rgba(250,204,21,.15);color:var(--accent);border:1px solid rgba(250,204,21,.4);padding:3px 10px;border-radius:50px;font-size:.68rem;font-weight:800;">BASIS SKOR: 0 • AUDIT JARAK</span>
+          </div>
+          <span style="font-size:.76rem;opacity:.68;font-weight:600;">Penilaian ketat otomatis berdasarkan foto real-time asli, koordinat GPS berbeda, variasi pengerjaan & kerajinan harian</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <div class="period-tabs" id="creditPeriodTabs">
+            <button type="button" class="period-tab active" data-period="all" onclick="setCreditPeriod('all', this)">Semua Waktu</button>
+            <button type="button" class="period-tab" data-period="month" onclick="setCreditPeriod('month', this)">Bulan Ini</button>
+            <button type="button" class="period-tab" data-period="today" onclick="setCreditPeriod('today', this)">Hari Ini</button>
+          </div>
+          <button type="button" onclick="toggleFormulaDrawer()" class="btn-3d" style="background:rgba(255,255,255,.06);color:var(--title);border:1px solid var(--glass-border);width:auto;padding:8px 13px;font-size:.76rem;"><i class="fas fa-shield-alt" style="color:var(--success);"></i> Aturan Audit Penilaian</button>
+        </div>
+      </div>
+
+      <!-- Penjelasan Transparan Rumus & Audit Anti-Manipulasi -->
+      <div class="formula-drawer" id="creditFormulaDrawer">
+        <div style="font-weight:800;color:var(--accent);margin-bottom:6px;"><i class="fas fa-balance-scale"></i> Standar Perhitungan Credit Score (Skor Dasar = 0)</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;">
+          <div>
+            <strong>1. Syarat Wajib Lolos Penilaian (0 Poin jika Gagal):</strong><br>
+            • Wajib ada <strong>Foto Kamera Real-Time Asli</strong> (foto duplikat ditolak).<br>
+            • Wajib ada <strong>Koordinat GPS Valid</strong>.<br>
+            • Jarak titik GPS laporan baru <strong>wajib ≥ 30 meter</strong> dari laporan valid sebelumnya di hari yang sama.
+          </div>
+          <div>
+            <strong>2. Akumulasi Poin dari Skor 0:</strong><br>
+            • <strong>+10 pts</strong> setiap 1 laporan valid lolos audit.<br>
+            • <strong>+5 pts</strong> setiap 1 titik lokasi baru (≥ 30m dari seluruh riwayat).<br>
+            • <strong>+4 pts</strong> setiap 1 jenis bidang pekerjaan berbeda.<br>
+            • <strong>+5 pts</strong> per hari aktif melapor + <strong>+3 pts</strong> bonus harian jika ≥ 3 titik valid/hari.
+          </div>
+        </div>
+      </div>
+
+      <div class="credit-grid-layout" style="margin-top:14px;">
+        <!-- Viewport 3D Three.js -->
+        <div class="canvas-3d-box" id="creditScore3dWrapper">
+          <div class="canvas-3d-hud-top">
+            <span class="hud-pill"><i class="fas fa-cube" style="color:var(--accent);"></i>  PODIUM KINERJA (0 - MAX)</span>
+            <span class="hud-pill" id="credit3dSummaryPill"><i class="fas fa-check-circle" style="color:var(--success);"></i> 0 Petugas Dinilai</span>
+          </div>
+          <canvas id="creditScore3dCanvas"></canvas>
+          <div class="canvas-3d-hint"><i class="fas fa-hand-pointer"></i> Geser untuk memutar • Klik pilar untuk rincian</div>
+          <div class="canvas-3d-controls">
+            <button type="button" class="btn-3d-mini" id="btnToggleAutoSpin" onclick="toggleCreditAutoSpin()"><i class="fas fa-sync-alt"></i> Putar: ON</button>
+            <button type="button" class="btn-3d-mini" onclick="resetCreditCamera()"><i class="fas fa-compress-arrows-alt"></i> Reset</button>
+          </div>
+        </div>
+
+        <!-- Panel Peringkat & Audit Detail Petugas Terpilih -->
+        <div class="credit-side-panel">
+          <div class="credit-audit-card" id="selectedOfficerAuditCard">
+            <div style="font-size:.78rem;opacity:.75;text-align:center;padding:10px 0;">Belum ada data laporan terverifikasi. Skor dimulai dari <strong>0</strong>.</div>
+          </div>
+          <div class="credit-rank-list" id="creditRankList"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FITUR LAPORAN KERJA REAL-TIME & PUBLIK ============ -->
+  <section id="laporan-kerja" style="padding:20px 0;">
+    <div class="slider-header">
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <h2 class="section-title">Laporan Kerja Real-Time</h2>
+          <span style="background:rgba(16,185,129,.15);color:var(--success);border:1px solid var(--success);padding:2px 10px;border-radius:50px;font-size:.68rem;font-weight:800;"><i class="fas fa-globe"></i> PUBLIK & TERVERIFIKASI</span>
+        </div>
+        <span style="font-size:.75rem;opacity:.6;font-weight:600;">Dokumentasi foto waktu & lokasi GPS real-time sebagai dasar penilaian Credit Score petugas</span>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn-3d" onclick="openPublicPortal()" title="Pratinjau Tampilan Publik" style="background:rgba(16,185,129,.15);color:var(--success);border:1px solid var(--success);width:auto;padding:10px 14px;font-size:.8rem;"><i class="fas fa-eye"></i> Publik</button>
+        <button class="btn-3d" onclick="openLaporanKerjaForm()" style="background:var(--accent);color:#000;width:auto;padding:10px 18px;"><i class="fas fa-camera"></i> Buat Laporan</button>
+      </div>
+    </div>
+    <div class="search-bar">
+      <input type="text" id="laporanSearch" placeholder="🔍 Cari petugas, alamat, atau kegiatan...">
+      <select id="laporanFilterKategori">
+        <option value="">Semua Kategori Kerja</option>
+        <option>Penanganan Kebersihan</option>
+        <option>Pemeliharaan Saluran / Got</option>
+        <option>Pengangkutan Sampah</option>
+        <option>Penataan Kawasan / Taman</option>
+        <option>Pemangkasan Pohon / Ranting</option>
+        <option>Tanggap Darurat / Banjir</option>
+      </select>
+      <button class="btn-slide" onclick="fetchLaporanKerja(true)" title="Perbarui Data" style="width:auto;padding:0 14px;border-radius:12px;"><i class="fas fa-sync-alt"></i></button>
+    </div>
+    <div class="request-feed" id="laporanKerjaFeed"></div>
+  </section>
+
+  <!-- ============ KOORDINASI (EXISTING - TIDAK DIUBAH) ============ -->
+  <section id="layanan" style="padding:20px 0;">
+    <div class="slider-header">
+      <div><h2 class="section-title">Koordinasi</h2></div>
+      <button class="btn-3d" onclick="openRequestForm()" style="background:var(--accent);color:#000;width:auto;padding:10px 20px;"><i class="fas fa-plus"></i> Buat</button>
+    </div>
+    <div class="search-bar">
+      <input type="text" id="requestSearch" placeholder="🔍 Cari ID, alamat...">
+      <select id="requestFilter">
+        <option value="">Semua Status</option>
+        <option value="pending">Menunggu</option>
+        <option value="accepted">Diterima</option>
+        <option value="progress">Diproses</option>
+        <option value="pending_validation">Validasi Admin</option>
+        <option value="done">Selesai</option>
+      </select>
+      <button class="btn-slide" onclick="fetchRequests()" title="Refresh" style="width:auto;padding:0 14px;border-radius:12px;"><i class="fas fa-sync-alt"></i></button>
+    </div>
+    <div class="request-feed" id="requestFeed"></div>
+  </section>
+
+  <section class="crm-section" id="informasi">
+    <div class="crm-header">
+      <div><h2 style="font-size:1.5rem;font-weight:800;color:var(--title);">Pemberitahuan</h2></div>
+      <button class="btn-3d" onclick="openAddInfoModal()" style="background:var(--accent);color:#000;width:auto;padding:10px 20px;"><i class="fas fa-plus"></i> Info</button>
+    </div>
+    <div class="search-bar" style="padding:0;margin-bottom:20px;">
+      <input type="text" id="infoSearch" placeholder="🔍 Cari informasi...">
+    </div>
+    <div class="crm-feed" id="infoFeed"></div>
+  </section>
+
+  <div class="slider-header" id="medsos"><div><h2 class="section-title">Media Sosial & Kontak</h2></div></div>
+  <div class="medsos-grid">
+    <a href="https://wa.me/62895637243864" target="_blank" class="medsos-card">
+      <div class="medsos-icon icon-wa"><i class="fab fa-whatsapp"></i></div>
+      <div class="medsos-info"><h4 class="medsos-title">WhatsApp</h4><p class="medsos-sub">Tanggap cepat</p></div>
+    </a>
+    <a href="https://www.instagram.com/ppsu_pisanganbaru" target="_blank" class="medsos-card">
+      <div class="medsos-icon icon-ig"><i class="fab fa-instagram"></i></div>
+      <div class="medsos-info"><h4 class="medsos-title">Instagram</h4><p class="medsos-sub">@ppsu_pisanganbaru</p></div>
+    </a>
+  </div>
+
+  <section class="apps-section" id="tools">
+    <div class="apps-container">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;">
+        <h3 class="section-title">Alat & Fitur</h3>
+        <button id="btn-see-all" style="background:rgba(16,185,129,.1);border:none;color:var(--success);padding:8px 16px;border-radius:50px;font-weight:700;cursor:pointer;">Lihat Semua</button>
+      </div>
+      <div class="apps-grid" id="apps-grid">
+        <a href="#" onclick="openLaporanKerjaForm();return false;" class="app-item"><div class="icon-box"><i class="fas fa-camera-retro" style="font-size:1.8rem;color:#a855f7;"></i></div><span class="app-label">Laporan Kerja</span></a>
+        <a href="#credit-score-section" class="app-item"><div class="icon-box"><i class="fas fa-cubes" style="font-size:1.8rem;color:var(--accent);"></i></div><span class="app-label">Credit Score 3D</span></a>
+        <a href="#" onclick="openRequestForm();return false;" class="app-item"><div class="icon-box"><i class="fas fa-hands-helping" style="font-size:1.8rem;color:var(--accent);"></i></div><span class="app-label">Buat Koordinasi</span></a>
+        <a href="#" onclick="openAbsensi();return false;" class="app-item"><div class="icon-box"><i class="fas fa-fingerprint" style="font-size:1.8rem;color:var(--success);"></i></div><span class="app-label">Absensi</span></a>
+        <a href="#" onclick="openJadwal();return false;" class="app-item"><div class="icon-box"><i class="fas fa-calendar-days" style="font-size:1.8rem;color:#38bdf8;"></i></div><span class="app-label">Jadwal Kerja</span></a>
+        <a href="#" onclick="openManajemenRequest();return false;" class="app-item"><div class="icon-box"><i class="fas fa-clipboard-list" style="font-size:1.8rem;color:var(--warning);"></i></div><span class="app-label">Manajemen</span></a>
+        <a href="#" onclick="openPublicPortal();return false;" class="app-item"><div class="icon-box"><i class="fas fa-globe-asia" style="font-size:1.8rem;color:var(--success);"></i></div><span class="app-label">Portal Publik</span></a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ MODALS ============ -->
+
+<!-- MODAL BUAT LAPORAN KERJA REAL-TIME (KAMERA + WATERMARK WAKTU & GPS) -->
+<div class="custom-modal" id="modalLaporanKerjaForm">
+  <div class="modal-body" style="max-width:540px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <div>
+        <h3 style="color:var(--title);font-size:1.15rem;">Laporan Kerja Real-Time</h3>
+        <span style="font-size:.72rem;color:var(--success);font-weight:700;"><i class="fas fa-check-circle"></i> Wajib area berbeda dari titik laporan sebelumnya hari ini</span>
+      </div>
+      <button class="modal-close" onclick="closeLaporanKerjaForm()">✕</button>
+    </div>
+    <form onsubmit="submitLaporanKerja(event)">
+      <input type="text" id="lapNamaPetugas" class="login-input" placeholder="Nama Petugas / Tim PPSU" required>
+      
+      <select id="lapKategori" class="login-input" required>
+        <option value="" disabled selected>-- Pilih Bidang Pekerjaan --</option>
+        <option>Penanganan Kebersihan</option>
+        <option>Pemeliharaan Saluran / Got</option>
+        <option>Pengangkutan Sampah</option>
+        <option>Penataan Kawasan / Taman</option>
+        <option>Pemangkasan Pohon / Ranting</option>
+        <option>Tanggap Darurat / Banjir</option>
+      </select>
+
+      <input type="text" id="lapJudul" class="login-input" placeholder="Judul Kegiatan (Contoh: Pembersihan Saluran Air RW 05)" required>
+      <input type="text" id="lapLokasiDetail" class="login-input" placeholder="Detail Lokasi / Nama Jalan / RT-RW" required>
+      <textarea id="lapDeskripsi" class="login-input" placeholder="Uraian singkat hasil pekerjaan di lapangan..." rows="2" required></textarea>
+
+      <!-- Status Waktu & GPS Live -->
+      <div style="background:rgba(255,255,255,.03);border:1px solid var(--glass-border);border-radius:14px;padding:10px 12px;margin-bottom:12px;font-size:.75rem;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+          <span style="opacity:.7;"><i class="fas fa-clock" style="color:var(--accent);"></i> Waktu Real-Time:</span>
+          <strong id="lapLiveClockText" style="color:var(--accent);">--</strong>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+          <span style="opacity:.7;"><i class="fas fa-location-crosshairs" style="color:var(--success);"></i> Koordinat GPS:</span>
+          <span id="lapGpsStatusText" style="font-weight:700;text-align:right;">Mendeteksi satelit GPS...</span>
+        </div>
+        <div id="lapDistanceAuditBanner" style="font-size:.72rem;margin-top:6px;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,.03);display:none;"></div>
+        <div id="lapAddressAutoText" style="font-size:.7rem;opacity:.75;margin-top:4px;border-top:1px dashed var(--glass-border);padding-top:4px;">📍 Menunggu alamat otomatis...</div>
+      </div>
+
+      <!-- Kamera Live dengan Overlay HUD -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <label style="font-size:.75rem;color:var(--accent);font-weight:800;"><i class="fas fa-camera"></i> Foto Bukti Lapangan (Live Camera)</label>
+        <button type="button" id="btnSwitchLapCam" onclick="switchLapCamera()" style="display:none;background:rgba(255,255,255,.08);border:1px solid var(--glass-border);color:var(--title);padding:4px 10px;border-radius:8px;font-size:.7rem;cursor:pointer;"><i class="fas fa-sync"></i> Putar Kamera</button>
+      </div>
+
+      <div class="camera-container rear-cam" id="lapCamBox">
+        <div class="camera-placeholder" id="lapCamPlaceholder">
+          <i class="fas fa-camera"></i>
+          <span style="font-size:.78rem;">Klik "Buka Kamera" untuk mengambil foto real-time</span>
+        </div>
+        <video id="lapCamVideo" autoplay playsinline muted style="display:none;"></video>
+        <img id="lapCamSnapshot" style="display:none;" alt="Hasil Foto Laporan">
+        <div class="cam-live-hud" id="lapCamHud" style="display:none;">
+          <div class="hud-top">
+            <span><span class="cam-rec-dot"></span>LIVE • PPSU PISBAR</span>
+            <span id="hudTime">--:--:-- WIB</span>
+          </div>
+          <div id="hudCoords">GPS: Mencari koordinat...</div>
+          <div id="hudAddr" style="opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Kelurahan Pisangan Baru, Jakarta Timur</div>
+        </div>
+      </div>
+
+      <div class="absensi-buttons" style="margin-bottom:14px;">
+        <button type="button" id="btnBukaLapCam" onclick="startLapCam()" class="btn-3d" style="background:rgba(250,204,21,0.2);color:var(--accent);border:1px solid var(--accent);"><i class="fas fa-camera"></i> Buka Kamera</button>
+        <button type="button" id="btnAmbilLapCam" onclick="captureLapCam()" class="btn-3d" style="background:var(--accent);color:#000;display:none;"><i class="fas fa-camera-retro"></i> Ambil Foto</button>
+        <button type="button" id="btnUlangiLapCam" onclick="retakeLapCam()" class="btn-3d" style="background:rgba(255,255,255,0.1);color:white;display:none;"><i class="fas fa-redo"></i> Foto Ulang</button>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-top:10px;">
+        <button type="submit" id="btnSubmitLaporan" class="btn-3d" style="background:var(--success);color:white;"><i class="fas fa-cloud-upload-alt"></i> SIMPAN & PUBLIKASIKAN</button>
+        <button type="button" onclick="closeLaporanKerjaForm()" class="btn-3d" style="background:rgba(255,255,255,.1);color:white;">BATAL</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL DETAIL / LIGHTBOX FOTO LAPORAN KERJA -->
+<div class="custom-modal" id="modalLaporanDetail">
+  <div class="modal-body" style="max-width:640px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <h3 style="color:var(--title);font-size:1.1rem;">Detail Laporan Kerja</h3>
+      <button class="modal-close" onclick="closeModal('modalLaporanDetail')">✕</button>
+    </div>
+    <div id="laporanDetailBody"></div>
+  </div>
+</div>
+
+<!-- MODAL KONFIRMASI KELUAR -->
+<div class="custom-modal" id="modalConfirmLogout" style="z-index:10005;">
+  <div class="modal-body" style="max-width:360px;text-align:center;">
+    <i class="fas fa-sign-out-alt" style="font-size:2.2rem;color:var(--error);margin-bottom:12px;"></i>
+    <h3 style="color:var(--title);margin-bottom:8px;">Keluar dari Sistem?</h3>
+    <p style="font-size:.85rem;opacity:.75;margin-bottom:20px;">Sesi login Anda akan diakhiri. Anda tetap dapat melihat laporan publik kapan saja.</p>
+    <div style="display:flex;gap:10px;">
+      <button type="button" onclick="confirmLogoutAction()" class="btn-3d" style="background:var(--error);color:white;">YA, KELUAR</button>
+      <button type="button" onclick="closeModal('modalConfirmLogout')" class="btn-3d" style="background:rgba(255,255,255,.1);color:white;">BATAL</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL TAMBAH INFO (EXISTING) -->
+<div class="custom-modal" id="modalAddInfo">
+  <div class="modal-body">
+    <h3 style="margin-bottom:15px;color:var(--title);">Form Tambah Informasi</h3>
+    <form onsubmit="submitInfo(event)">
+      <input type="text" id="infoJudul" class="login-input" placeholder="Judul Informasi" required>
+      <select id="infoKategori" class="login-input" required>
+        <option value="" disabled selected>-- Pilih Kategori --</option>
+        <option>Pengumuman</option><option>Jadwal Kegiatan</option><option>Himbauan Warga</option>
+      </select>
+      <textarea id="infoDeskripsi" class="login-input" placeholder="Isi detail informasi..." rows="4" required></textarea>
+      <input type="file" id="infoFoto" class="login-input" accept="image/*">
+      <div style="display:flex;gap:10px;margin-top:10px;">
+        <button type="submit" class="btn-3d" style="background:var(--accent);color:#000;">POSTING</button>
+        <button type="button" class="btn-3d" onclick="closeModal('modalAddInfo')" style="background:rgba(255,255,255,.1);color:white;">BATAL</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- FORM REQUEST (EXISTING - TIDAK DIUBAH) -->
+<div class="custom-modal" id="modalRequestForm">
+  <div class="modal-body">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+      <h3 style="color:var(--title);">Buat Koordinasi</h3>
+      <button class="modal-close" onclick="closeRequestForm()">✕</button>
+    </div>
+    <form onsubmit="submitRequest(event)">
+      <input type="text" id="reqNama" class="login-input" placeholder="Nama lengkap" autocomplete="off" required>
+      <input type="tel" id="reqPhone" class="login-input" placeholder="No. WhatsApp (contoh: 08123456789)" autocomplete="off" required>
+
+      <select id="reqKategori" class="login-input" required>
+        <option value="" disabled selected>-- Kategori Masalah --</option>
+        <option>Kebersihan Jalan</option><option>Pengangkutan Sampah</option>
+        <option>Got / Saluran</option><option>Pohon / Ranting</option>
+        <option>Taman / Fasum</option><option>Lainnya</option>
+      </select>
+      <input type="text" id="reqAlamat" class="login-input" placeholder="Alamat lengkap" required>
+      <textarea id="reqDeskripsi" class="login-input" placeholder="Jelaskan masalah..." rows="2" required></textarea>
+      
+      <label style="font-size:.75rem;color:var(--accent);display:block;margin-bottom:5px;font-weight:800;"><i class="fas fa-camera"></i> Foto Bukti (Live Camera, Wajib)</label>
+      <div class="camera-container">
+        <div class="camera-placeholder" id="reqCamPlaceholder"><i class="fas fa-camera"></i><span style="font-size:.75rem;">Kamera belum aktif</span></div>
+        <video id="reqCamVideo" autoplay playsinline muted style="display:none;"></video>
+        <img id="reqCamSnapshot" style="display:none;">
+      </div>
+      <div class="absensi-buttons" style="margin-bottom:15px;">
+        <button type="button" id="btnBukaReqCam" onclick="startReqCam()" class="btn-3d" style="background:rgba(250,204,21,0.2);color:var(--accent);border:1px solid var(--accent);"><i class="fas fa-camera"></i> Buka Kamera</button>
+        <button type="button" id="btnAmbilReqCam" onclick="captureReqCam()" class="btn-3d" style="background:var(--accent);color:#000;display:none;"><i class="fas fa-camera-retro"></i> Ambil</button>
+        <button type="button" id="btnUlangiReqCam" onclick="retakeReqCam()" class="btn-3d" style="background:rgba(255,255,255,0.1);color:white;display:none;"><i class="fas fa-redo"></i> Ulangi</button>
+      </div>
+
+      <div id="reqLokasiInfo" style="font-size:.75rem;color:var(--txt);opacity:.7;margin-bottom:15px;text-align:center;"> Mendeteksi lokasi GPS...</div>
+
+      <div style="display:flex;gap:10px;margin-top:15px;">
+        <button type="submit" class="btn-3d" style="background:var(--accent);color:#000;">KIRIM PERMINTAAN</button>
+        <button type="button" class="btn-3d" onclick="closeRequestForm()" style="background:rgba(255,255,255,.1);color:white;">BATAL</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL DETAIL REQUEST (EXISTING) -->
+<div class="custom-modal" id="modalRequestDetail">
+  <div class="modal-body" style="max-width:650px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+      <h3 style="color:var(--title);">Detail Permintaan</h3>
+      <button class="modal-close" onclick="closeModal('modalRequestDetail')">✕</button>
+    </div>
+    <div id="requestDetailBody"></div>
+  </div>
+</div>
+
+<!-- MODAL SELESAIKAN PEKERJAAN (EXISTING) -->
+<div class="custom-modal" id="modalCompleteWork" style="z-index: 10000;">
+  <div class="modal-body">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+      <h3 style="color:var(--title);">Laporkan Hasil Pengerjaan</h3>
+      <button class="modal-close" onclick="closeCompleteWork()">✕</button>
+    </div>
+    <input type="hidden" id="workRequestId">
+    <div id="workDetailInfo" style="font-size:.8rem;opacity:.7;margin-bottom:15px;"></div>
+
+    <label style="font-size:.75rem;color:var(--accent);display:block;margin-bottom:5px;font-weight:800;"><i class="fas fa-users"></i> Nama Tim Petugas (Wajib)</label>
+    <input type="text" id="workTimPetugas" class="login-input" placeholder="Contoh: Tim Zona 1 - Hermansyah, Asep, Nur Iman" required>
+
+    <label style="font-size:.75rem;color:var(--accent);display:block;margin-bottom:5px;font-weight:800;margin-top:10px;"><i class="fas fa-camera"></i> Foto Hasil Pengerjaan (Live Camera, Wajib)</label>
+    <div class="camera-container">
+      <div class="camera-placeholder" id="resCamPlaceholder"><i class="fas fa-camera"></i><span style="font-size:.75rem;">Kamera belum aktif</span></div>
+      <video id="resCamVideo" autoplay playsinline muted style="display:none;"></video>
+      <img id="resCamSnapshot" style="display:none;">
+    </div>
+    <div class="absensi-buttons" style="margin-bottom:15px;">
+      <button type="button" id="btnBukaResCam" onclick="startResCam()" class="btn-3d" style="background:rgba(250,204,21,0.2);color:var(--accent);border:1px solid var(--accent);"><i class="fas fa-camera"></i> Buka Kamera</button>
+      <button type="button" id="btnAmbilResCam" onclick="captureResCam()" class="btn-3d" style="background:var(--accent);color:#000;display:none;"><i class="fas fa-camera-retro"></i> Ambil</button>
+      <button type="button" id="btnUlangiResCam" onclick="retakeResCam()" class="btn-3d" style="background:rgba(255,255,255,0.1);color:white;display:none;"><i class="fas fa-redo"></i> Ulangi</button>
+    </div>
+
+    <div id="resLokasiInfo" style="font-size:.75rem;color:var(--txt);opacity:.7;margin-bottom:15px;text-align:center;"> Mendeteksi lokasi GPS...</div>
+
+    <div style="display:flex;gap:10px;margin-top:15px;">
+      <button type="button" onclick="submitWorkCompletion()" class="btn-3d" style="background:var(--success);color:white;">KIRIM UNTUK VALIDASI ADMIN</button>
+      <button type="button" onclick="closeCompleteWork()" class="btn-3d" style="background:rgba(255,255,255,.1);color:white;">BATAL</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ABSENSI (EXISTING) -->
+<div class="custom-modal" id="modalAbsensi">
+  <div class="modal-body">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+      <h3 style="color:var(--title);">Absensi Petugas</h3>
+      <button class="modal-close" onclick="closeAbsensiModal()">✕</button>
+    </div>
+    <div class="absensi-card">
+      <div style="background:rgba(250,204,21,0.1);border:1px solid var(--accent);border-radius:12px;padding:12px;margin-bottom:15px;text-align:left;">
+        <div style="font-size:0.7rem;opacity:0.7;">Nama Petugas (Bisa diubah jika HP dipakai bergantian):</div>
+        <input type="text" id="absensiNamaPetugasInput" class="login-input" style="margin-bottom:0;padding:8px 12px;font-weight:800;color:var(--accent);" value="" required>
+      </div>
+      <div class="absensi-date" id="absensiDate">--</div>
+      <div class="absensi-time" id="absensiClock">--:--:--</div>
+      
+      <div class="camera-container">
+        <div class="camera-placeholder" id="cameraPlaceholder"><i class="fas fa-camera"></i><span style="font-size:.85rem;">Kamera belum aktif</span></div>
+        <video id="absensiVideo" autoplay playsinline muted style="display:none;"></video>
+        <img id="absensiSnapshot" style="display:none;">
+      </div>
+
+      <div class="absensi-buttons" style="margin-bottom:15px;">
+        <button id="btnBukaKamera" onclick="startAbsensiCamera()" class="btn-3d" style="background:rgba(250,204,21,0.2);color:var(--accent);border:1px solid var(--accent);"><i class="fas fa-camera"></i> Buka Kamera</button>
+        <button id="btnAmbilFoto" onclick="captureAbsensiPhoto()" class="btn-3d" style="background:var(--accent);color:#000;display:none;"><i class="fas fa-camera-retro"></i> Ambil Foto</button>
+        <button id="btnUlangiFoto" onclick="retakeAbsensiPhoto()" class="btn-3d" style="background:rgba(255,255,255,0.1);color:white;display:none;"><i class="fas fa-redo"></i> Ulangi</button>
+      </div>
+
+      <div class="absensi-buttons">
+        <button class="absensi-btn in" id="btnCheckIn" onclick="doCheckIn()" disabled><i class="fas fa-sign-in-alt"></i><span>Absen Masuk</span></button>
+        <button class="absensi-btn out" id="btnCheckOut" onclick="doCheckOut()" disabled><i class="fas fa-sign-out-alt"></i><span>Absen Keluar</span></button>
+      </div>
+      <div class="absensi-status" id="absensiStatus">Belum absen hari ini</div>
+      <div class="absensi-log" id="absensiLog"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL JADWAL (EXISTING) -->
+<div class="custom-modal" id="modalJadwal">
+  <div class="modal-body" style="max-width:800px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+      <h3 style="color:var(--title);">Jadwal Kerja</h3>
+      <button class="modal-close" onclick="closeModal('modalJadwal')">✕</button>
+    </div>
+    <div class="jadwal-filter">
+      <select id="jadwalPetugasFilter" class="login-input" style="margin:0;padding:10px 14px;width:auto;"><option value="">Semua Petugas</option></select>
+      <select id="jadwalShiftFilter" class="login-input" style="margin:0;padding:10px 14px;width:auto;"><option value="">Semua Shift</option><option>Pagi</option><option>Siang</option><option>Piket </option></select>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="jadwal-table" id="jadwalTable">
+        <thead><tr><th>Hari</th><th>Tanggal</th><th>Shift</th><th>Petugas</th><th>Area</th></tr></thead>
+        <tbody><tr><td colspan="5" style="text-align:center;padding:30px;opacity:.5;">Memuat...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL MANAJEMEN (EXISTING) -->
+<div class="custom-modal" id="modalManajemen">
+  <div class="modal-body" style="max-width:700px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+      <h3 style="color:var(--title);">Manajemen Request</h3>
+      <button class="modal-close" onclick="closeModal('modalManajemen')">✕</button>
+    </div>
+    <div id="manajemenBody" style="font-size:.85rem;"></div>
+  </div>
+</div>
+
+<div id="app-viewer">
+  <div class="viewer-header">
+    <button class="btn-back-home" onclick="closeApp()"><i class="fas fa-arrow-left"></i> Kembali</button>
+    <span id="viewer-title" style="font-size:.85rem;opacity:.9;font-weight:700;color:var(--title);">APPIS Fitur</span>
+  </div>
+  <iframe id="app-iframe" title="Frame Aplikasi"></iframe>
+</div>
+
+<nav class="bottom-nav" id="mobile-nav">
+  <a href="#" class="bnav-item active" onclick="handleBNav(this)"><i class="fas fa-house"></i><span>Beranda</span></a>
+  <a href="#credit-score-section" class="bnav-item" onclick="handleBNav(this)"><i class="fas fa-cubes"></i><span>Skor</span></a>
+  <a href="#laporan-kerja" class="bnav-item" onclick="handleBNav(this)"><i class="fas fa-camera-retro"></i><span>Laporan</span></a>
+  <a href="#layanan" class="bnav-item" onclick="handleBNav(this)"><i class="fas fa-hands-helping"></i><span>Koordinasi</span></a>
+  <a href="#tools" class="bnav-item" onclick="handleBNav(this)"><i class="fas fa-border-all"></i><span>Alat</span></a>
+</nav>
+
+<script>
+const GAS_API_URL = "https://script.google.com/macros/s/AKfycby0U8vu5q4Z8MP2iOEmI5DEcU9YTpVjfrm91zfRiHi1TipHUD9t-TZnfJNQzCfgvnKP/exec";
+const MIN_DISTANCE_METERS = 30; // Standar minimal jarak berbeda 30 meter antar titik laporan
+
+let currentUser = null;
+let localInfo = [], localRequests = [], localJadwal = [], localAbsensi = [];
+let localLaporanKerja = [];
+const pollTimers = {};
+
+// Helper Role Kompatibel dengan Sheet Users ("PPSU", "admin", "petugas")
+function isStaffUser(u = currentUser){
+  const r = String(u?.role || '').toLowerCase().trim();
+  return ['admin', 'petugas', 'ppsu'].includes(r);
+}
+function isAdminUser(u = currentUser){
+  const r = String(u?.role || '').toLowerCase().trim();
+  return ['admin', 'ppsu'].includes(r);
+}
+
+// State Global untuk Kamera
+let absensiStream = null, absensiCaptured = null;
+let reqCamStream = null, reqCamCaptured = null;
+let resCamStream = null, resCamCaptured = null;
+
+// State Khusus Kamera Laporan Kerja Real-Time
+let lapCamStream = null, lapCamCaptured = null, lapCapturedHash = '';
+let lapFacingMode = 'environment';
+let lapWatchId = null, lapCurrentCoords = '', lapCurrentAddress = 'Kelurahan Pisangan Baru, Kec. Matraman, Jakarta Timur';
+
+// State Credit Score & Grafik 3D
+let creditPeriod = 'all';
+let creditLeaderboard = [];
+let selectedCreditOfficerKey = null;
+let cs3d = {
+  scene: null, camera: null, renderer: null,
+  barGroups: [], raycaster: null, pointer: null,
+  rotY: 0, rotX: 0.34, targetRotY: 0, targetRotX: 0.34,
+  isDragging: false, dragMoved: false, prevX: 0, prevY: 0,
+  autoSpin: true, animStarted: false
+};
+
+// ============ UTILS ============
+function escapeHTML(s){
+  if(s==null) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function formatWaktuLokal(s){
+  if(!s) return '-';
+  try{ const d = new Date(s); if(isNaN(d)) return s;
+    return d.toLocaleString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:false}).replace(/\//g,' ');
+  }catch(e){ return s; }
+}
+function formatWaktuLengkapWIB(dateObj = new Date()){
+  const tgl = dateObj.toLocaleDateString('id-ID', { weekday:'long', day:'2-digit', month:'short', year:'numeric' });
+  const jam = dateObj.toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false });
+  return `${tgl} • ${jam} WIB`;
+}
+function getJakartaDateKey(dateInput){
+  try {
+    const d = dateInput ? new Date(dateInput) : new Date();
+    if(isNaN(d)) return new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' });
+    return d.toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' });
+  } catch(e){
+    return new Date().toISOString().split('T')[0];
+  }
+}
+function timeAgo(s){
+  if(!s) return '-'; const diff = (Date.now() - new Date(s).getTime()) / 1000;
+  if(diff < 60) return 'baru saja'; if(diff < 3600) return Math.floor(diff/60) + ' menit lalu';
+  if(diff < 86400) return Math.floor(diff/3600) + ' jam lalu'; if(diff < 604800) return Math.floor(diff/86400) + ' hari lalu';
+  return formatWaktuLokal(s);
+}
+function parseCoords(s) {
+  if(!s) return null; const p = String(s).split(',');
+  if(p.length !== 2) return null; const lat = parseFloat(p[0]), lng = parseFloat(p[1]);
+  if(isNaN(lat) || isNaN(lng)) return null;
+  if(Math.abs(lat) > 90 || Math.abs(lng) > 180) return null;
+  if(Math.abs(lat) < 0.0001 && Math.abs(lng) < 0.0001) return null;
+  return { lat, lng };
+}
+function haversine(c1, c2) {
+  if(!c1 || !c2) return null;
+  const R = 6371000, toRad = x => x * Math.PI / 180;
+  const dLat = toRad(c2.lat - c1.lat), dLon = toRad(c2.lng - c1.lng);
+  const a = Math.sin(dLat/2)**2 + Math.cos(toRad(c1.lat)) * Math.cos(toRad(c2.lat)) * Math.sin(dLon/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+async function compressImage(file, maxW=800, q=0.75){
+  return new Promise((res, rej) => {
+    const img = new Image(); const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const scale = Math.min(1, maxW/img.width);
+      const cv = document.createElement('canvas'); cv.width = img.width*scale; cv.height = img.height*scale;
+      cv.getContext('2d').drawImage(img,0,0,cv.width,cv.height);
+      URL.revokeObjectURL(url); res(cv.toDataURL('image/jpeg', q));
+    }; img.onerror = rej; img.src = url;
+  });
+}
+function getLocation(){
+  return new Promise((res, rej) => {
+    if(!navigator.geolocation) return rej(new Error('No geolocation'));
+    navigator.geolocation.getCurrentPosition(p => res(`${p.coords.latitude.toFixed(6)},${p.coords.longitude.toFixed(6)}`), e => rej(e), { enableHighAccuracy: true, timeout: 10000 });
+  });
+}
+function copyTextSafe(text, successMsg){
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast(successMsg || 'Teks berhasil disalin!', 'success');
+  } catch(e){
+    showToast('Salin manual: ' + text, 'info', 5000);
+  }
+}
+function showToast(msg, type='info', dur=3500){
+  let c = document.getElementById('toast-container');
+  if(!c){ c = document.createElement('div'); c.id = 'toast-container'; document.body.appendChild(c); }
+  const t = document.createElement('div'); t.className = 'toast ' + type;
+  const icons = { info:'fa-circle-info', success:'fa-circle-check', error:'fa-circle-exclamation', warning:'fa-triangle-exclamation' };
+  t.innerHTML = `<i class="fas ${icons[type]||icons.info}" style="color:var(--${type==='info'?'accent':type})"></i><span></span>`;
+  t.querySelector('span').textContent = msg; c.appendChild(t);
+  setTimeout(() => { t.classList.add('leaving'); setTimeout(() => t.remove(), 300); }, dur);
+}
+async function apiCall(payload){
+  const r = await fetch(GAS_API_URL, { method:'POST', headers:{'Content-Type':'text/plain'}, body: JSON.stringify(payload) }); return r.json();
+}
+async function apiGet(params){
+  const r = await fetch(GAS_API_URL + '?' + new URLSearchParams(params)); return r.json();
+}
+
+/* ============ LOADER & UI ============ */
+const progress = document.getElementById('progress'), loader = document.getElementById('loader');
+let w = 0; const loadInterval = setInterval(() => {
+  if(w >= 100){ clearInterval(loadInterval); setTimeout(() => { loader.style.opacity='0'; setTimeout(()=>loader.style.display='none',500); },400); }
+  else { w += 10; progress.style.width = w + '%'; }
+}, 30);
+
+const modeToggle = document.getElementById('mode-toggle');
+if(modeToggle){
+  const saved = localStorage.getItem('appis-theme');
+  if(saved === 'light' || (!saved && window.matchMedia('(prefers-color-scheme: light)').matches)){
+    document.body.classList.add('light-mode'); modeToggle.querySelector('i').classList.replace('fa-moon','fa-sun');
+  }
+  modeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('light-mode'); const isLight = document.body.classList.contains('light-mode');
+    const icon = modeToggle.querySelector('i'); icon.classList.toggle('fa-sun', isLight); icon.classList.toggle('fa-moon', !isLight);
+    localStorage.setItem('appis-theme', isLight ? 'light' : 'dark');
+    rebuildCreditScore3DBars();
+  });
+}
+document.getElementById('togglePw')?.addEventListener('click', function(){
+  const inp = document.getElementById('password'); inp.type = inp.type === 'password' ? 'text' : 'password';
+  this.classList.toggle('fa-eye'); this.classList.toggle('fa-eye-slash');
+});
+function initRing(){
+  const ring = document.getElementById('ring'); if(!ring) return; ring.innerHTML = '';
+  const text = "PPSU PISANGAN BARU • APPIS MOBILE • "; const isMobile = window.innerWidth <= 600; const radius = isMobile ? 100 : 135;
+  const chars = text.split(''); const angle = 360 / chars.length;
+  chars.forEach((ch, i) => { const span = document.createElement('span'); span.innerText = ch; span.style.transform = `rotateY(${i*angle}deg) translateZ(${radius}px)`; ring.appendChild(span); });
+}
+
+/* ============ SLIDER & NAV ============ */
+const layananSlider = document.getElementById('layanan-slider');
+const btnPrev = document.getElementById('layanan-prev'), btnNext = document.getElementById('layanan-next');
+let autoScrollInterval; const scrollAmount = 300;
+function startAutoScroll(){ autoScrollInterval = setInterval(() => { if(layananSlider){ if(layananSlider.scrollLeft + layananSlider.clientWidth >= layananSlider.scrollWidth - 10) layananSlider.scrollTo({left:0,behavior:'smooth'}); else layananSlider.scrollBy({left:scrollAmount,behavior:'smooth'}); } }, 3000); }
+function stopAutoScroll(){ clearInterval(autoScrollInterval); }
+if(layananSlider){
+  startAutoScroll(); layananSlider.addEventListener('mouseenter', stopAutoScroll); layananSlider.addEventListener('mouseleave', startAutoScroll);
+  layananSlider.addEventListener('touchstart', stopAutoScroll, {passive:true}); layananSlider.addEventListener('touchend', startAutoScroll, {passive:true});
+}
+btnPrev?.addEventListener('click', () => { layananSlider.scrollBy({left:-scrollAmount,behavior:'smooth'}); stopAutoScroll(); startAutoScroll(); });
+btnNext?.addEventListener('click', () => { layananSlider.scrollBy({left:scrollAmount,behavior:'smooth'}); stopAutoScroll(); startAutoScroll(); });
+const btnSeeAll = document.getElementById('btn-see-all'), appsGrid = document.getElementById('apps-grid');
+btnSeeAll?.addEventListener('click', () => { appsGrid.classList.toggle('expanded'); btnSeeAll.innerText = appsGrid.classList.contains('expanded') ? 'Lebih Sedikit' : 'Lihat Semua'; });
+
+/* ============ AUTH ============ */
+async function handleAdminLogin(e){
+  e.preventDefault(); const btn = document.getElementById('btnLoginSubmit');
+  const u = document.getElementById('username').value.trim(), p = document.getElementById('password').value.trim();
+  if(!u || !p) return showToast('Isi email & password', 'warning');
+  btn.innerText = 'VERIFIKASI...'; btn.disabled = true;
+  try{ const res = await apiCall({ action:'login', email:u, password:p }); if(res.status === 'success'){ successLogin(res.user); } else showToast(res.message || 'Login gagal', 'error', 4500); }
+  catch(err){ showToast('Gagal terhubung ke server', 'error'); } finally{ btn.innerText = 'MASUK'; btn.disabled = false; }
+}
+function successLogin(userData){
+  const normalizedUser = {
+    ...(userData || {}),
+    petugasId: userData?.petugasId || userData?.id || ''
+  };
+  sessionStorage.setItem('isLoggedIn', 'true'); sessionStorage.setItem('userData', JSON.stringify(normalizedUser));
+  document.getElementById('loginSection').style.opacity = '0';
+  document.getElementById('publicReportPortal').style.display = 'none';
+  setTimeout(() => { document.getElementById('loginSection').style.display = 'none'; showMainContent(normalizedUser); }, 500);
+}
+function showMainContent(user){
+  currentUser = {
+    ...(user || {}),
+    petugasId: user?.petugasId || user?.id || ''
+  };
+  document.getElementById('main-content').style.display = 'block'; document.body.classList.add('logged-in');
+  if(currentUser){
+    if(currentUser.nama) {
+      document.getElementById('userDisplayName').innerText = currentUser.nama;
+      document.getElementById('absensiNamaPetugasInput').value = currentUser.nama;
+    }
+    if(currentUser.role) document.getElementById('userDisplayRole').innerText = currentUser.role;
+  }
+  initRing();
+  initCreditScore3DScene();
+  resizeCreditScore3D();
+  fetchInfo(); fetchRequests(); fetchLaporanKerja();
+  const manajemenTile = document.querySelector('.app-item[onclick*="openManajemenRequest"]');
+  if(manajemenTile) manajemenTile.classList.toggle('role-hidden', !isStaffUser(currentUser));
+  pollTimers.requests = setInterval(fetchRequests, 30000);
+  pollTimers.laporan = setInterval(fetchLaporanKerja, 45000);
+  if(window.innerWidth > 900){ setTimeout(() => { const a = document.querySelector('.nav-item.active'); if(a) moveLamp(a); }, 100); }
+}
+window.addEventListener('load', () => {
+  initCreditScore3DScene();
+  const params = new URLSearchParams(window.location.search);
+  const isPublicUrl = params.get('view') === 'publik' || window.location.hash === '#publik';
+  if(sessionStorage.getItem('isLoggedIn') === 'true'){
+    showMainContent(JSON.parse(sessionStorage.getItem('userData') || '{}'));
+    if(isPublicUrl) openPublicPortal();
+  } else if(isPublicUrl){
+    openPublicPortal();
+  }
+});
+function handleLogout(e){
+  if(e) e.stopPropagation();
+  document.getElementById('modalConfirmLogout').style.display = 'flex';
+}
+function confirmLogoutAction(){
+  closeModal('modalConfirmLogout');
+  sessionStorage.clear(); currentUser = null; Object.values(pollTimers).forEach(clearInterval);
+  document.getElementById('user-dropdown').classList.remove('show'); document.getElementById('user-dropdown').style.display = 'none';
+  document.getElementById('main-content').style.display = 'none'; document.body.classList.remove('logged-in');
+  const l = document.getElementById('loginSection'); l.style.display = 'flex'; setTimeout(()=>l.style.opacity='1',50);
+  showToast('Berhasil keluar dari sistem', 'info');
+}
+let dropdownOpen = false; const profileBtn = document.getElementById('profile-btn'), userDropdown = document.getElementById('user-dropdown');
+profileBtn?.addEventListener('click', (e) => { e.stopPropagation(); dropdownOpen = !dropdownOpen; userDropdown.style.display = dropdownOpen ? 'flex' : 'none'; requestAnimationFrame(() => userDropdown.classList.toggle('show', dropdownOpen)); });
+document.addEventListener('click', () => { if(dropdownOpen){ dropdownOpen = false; userDropdown.classList.remove('show'); setTimeout(() => { if(!dropdownOpen) userDropdown.style.display = 'none'; }, 300); } });
+const lamp = document.getElementById('lamp-indicator');
+function moveLamp(el){ if(!lamp || window.innerWidth <= 900) return; const c = document.querySelector('.nav-center-container'); if(!c) return; const cr = c.getBoundingClientRect(), er = el.getBoundingClientRect(); lamp.style.left = ((er.left - cr.left) + (er.width / 2) - 40) + 'px'; }
+function handleNavClick(e, el){ document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active')); el.classList.add('active'); moveLamp(el); }
+function handleBNav(el){ document.querySelectorAll('.bnav-item').forEach(i => i.classList.remove('active')); el.classList.add('active'); }
+window.addEventListener('resize', () => {
+  if(window.innerWidth > 900){ const a = document.querySelector('.nav-item.active'); if(a) moveLamp(a); }
+  initRing();
+  resizeCreditScore3D();
+});
+
+/* ============================================================================
+   SISTEM AUDIT KETAT & PERHITUNGAN CREDIT SCORE PETUGAS (BASIS 0, MIN JARAK 30M)
+   ============================================================================ */
+function evaluateStrictCreditScores(reports, period = 'all'){
+  const todayStr = getJakartaDateKey(new Date());
+  const monthPrefix = todayStr.slice(0, 7);
+
+  const scoped = (reports || []).filter(r => {
+    const dayKey = getJakartaDateKey(r.waktuRealtime || r.waktuFormatted);
+    if(period === 'today') return dayKey === todayStr;
+    if(period === 'month') return dayKey.startsWith(monthPrefix);
+    return true;
+  });
+
+  const chronological = [...scoped].sort((a, b) => {
+    const ta = new Date(a.waktuRealtime || 0).getTime() || 0;
+    const tb = new Date(b.waktuRealtime || 0).getTime() || 0;
+    return ta - tb;
+  });
+
+  const officers = {};
+  const auditFlagsByReportId = {};
+
+  chronological.forEach((r, idx) => {
+    const rawName = String(r.namaPetugas || 'Tim PPSU').trim();
+    const key = rawName.toLowerCase();
+    const repId = String(r.id || ('REP-' + idx));
+
+    if(!officers[key]){
+      officers[key] = {
+        key,
+        nama: rawName,
+        score: 0, // SKOR DASAR DIMULAI DARI 0
+        totalSubmitted: 0,
+        validCount: 0,
+        rejectedNearCount: 0,
+        rejectedNoGpsCount: 0,
+        rejectedDupPhotoCount: 0,
+        uniqueLocationsCount: 0,
+        seenPhotoSigs: new Set(),
+        allValidCoords: [],
+        dailyCoords: {},
+        dailyValidCount: {},
+        categories: new Set(),
+        poinLaporanValid: 0,
+        poinLokasiUnik: 0,
+        poinVariasiKerja: 0,
+        poinKonsistensiHarian: 0,
+        poinBonusRajin: 0,
+        hariAktif: 0,
+        hariTargetRajin: 0
+      };
+    }
+
+    const off = officers[key];
+    off.totalSubmitted++;
+
+    // 1. Audit Foto Real-Time Asli (Bukan kosong & bukan duplikat)
+    const fotoStr = String(r.foto || '').trim();
+    const hasValidFormat = /^(https?:|data:image\/)/i.test(fotoStr);
+    if(!hasValidFormat){
+      off.rejectedDupPhotoCount++;
+      auditFlagsByReportId[repId] = { valid: false, reason: 'Tanpa Foto Bukti (0 pts)' };
+      return;
+    }
+    const photoSig = r.fotoHash
+      ? String(r.fotoHash)
+      : (fotoStr.startsWith('http') ? fotoStr : (fotoStr.length + ':' + fotoStr.slice(0, 90) + ':' + fotoStr.slice(-90)));
+
+    if(off.seenPhotoSigs.has(photoSig)){
+      off.rejectedDupPhotoCount++;
+      auditFlagsByReportId[repId] = { valid: false, reason: 'Foto Duplikat Terdeteksi (0 pts)' };
+      return;
+    }
+
+    // 2. Audit Koordinat GPS Real-Time Valid
+    const coord = parseCoords(r.koordinat);
+    if(!coord){
+      off.rejectedNoGpsCount++;
+      auditFlagsByReportId[repId] = { valid: false, reason: 'Koordinat GPS Tidak Valid (0 pts)' };
+      return;
+    }
+
+    // 3. Audit Ketat Jarak Minimal 30 Meter (Haversine) pada hari yang sama
+    const dayKey = getJakartaDateKey(r.waktuRealtime || r.waktuFormatted);
+    const sameDayCoords = off.dailyCoords[dayKey] || [];
+    let minGapToday = Infinity;
+    for(const prev of sameDayCoords){
+      const d = haversine(prev, coord);
+      if(d !== null && d < minGapToday) minGapToday = d;
+    }
+
+    if(minGapToday < MIN_DISTANCE_METERS){
+      off.rejectedNearCount++;
+      auditFlagsByReportId[repId] = {
+        valid: false,
+        reason: `Jarak ${Math.round(minGapToday)}m (< ${MIN_DISTANCE_METERS}m) • 0 pts`
+      };
+      return;
+    }
+
+    // === LOLOS SEMUA AUDIT KETAT ===
+    off.seenPhotoSigs.add(photoSig);
+    off.validCount++;
+    if(!off.dailyCoords[dayKey]) off.dailyCoords[dayKey] = [];
+    off.dailyCoords[dayKey].push(coord);
+    off.dailyValidCount[dayKey] = (off.dailyValidCount[dayKey] || 0) + 1;
+
+    const isBrandNewSpot = off.allValidCoords.every(p => haversine(p, coord) >= MIN_DISTANCE_METERS);
+    if(isBrandNewSpot){
+      off.uniqueLocationsCount++;
+      off.allValidCoords.push(coord);
+    }
+
+    if(r.kategori){
+      off.categories.add(String(r.kategori).trim().toLowerCase());
+    }
+
+    auditFlagsByReportId[repId] = {
+      valid: true,
+      isNewSpot: isBrandNewSpot,
+      gapText: isFinite(minGapToday) ? `${Math.round(minGapToday)}m` : 'Titik Awal'
+    };
+  });
+
+  const ranked = Object.values(officers).map(off => {
+    off.hariAktif = Object.keys(off.dailyValidCount).length;
+    off.hariTargetRajin = Object.values(off.dailyValidCount).filter(cnt => cnt >= 3).length;
+
+    off.poinLaporanValid = off.validCount * 10;
+    off.poinLokasiUnik = off.uniqueLocationsCount * 5;
+    off.poinVariasiKerja = off.categories.size * 4;
+    off.poinKonsistensiHarian = off.hariAktif * 5;
+    off.poinBonusRajin = off.hariTargetRajin * 3;
+
+    // SKOR DASAR = 0
+    off.score = 0 + off.poinLaporanValid + off.poinLokasiUnik + off.poinVariasiKerja + off.poinKonsistensiHarian + off.poinBonusRajin;
+
+    if(off.score === 0){
+      off.tier = { label: 'Skor 0 (Belum Lolos Audit)', color: '#64748b', hex: 0x64748b };
+    } else if(off.score < 50){
+      off.tier = { label: 'Aktif', color: '#38bdf8', hex: 0x38bdf8 };
+    } else if(off.score < 120){
+      off.tier = { label: 'Disiplin', color: '#10b981', hex: 0x10b981 };
+    } else if(off.score < 250){
+      off.tier = { label: 'Andalan Wilayah', color: '#facc15', hex: 0xfacc15 };
+    } else {
+      off.tier = { label: 'Teladan Utama PPSU', color: '#a855f7', hex: 0xa855f7 };
+    }
+
+    return off;
+  }).sort((a, b) => {
+    if(b.score !== a.score) return b.score - a.score;
+    if(b.validCount !== a.validCount) return b.validCount - a.validCount;
+    return b.uniqueLocationsCount - a.uniqueLocationsCount;
+  });
+
+  return { ranked, auditFlagsByReportId };
+}
+
+function setCreditPeriod(period, btnEl){
+  creditPeriod = period;
+  document.querySelectorAll('#creditPeriodTabs .period-tab').forEach(b => b.classList.remove('active'));
+  if(btnEl) btnEl.classList.add('active');
+  refreshCreditScoreDashboard();
+}
+
+function toggleFormulaDrawer(){
+  document.getElementById('creditFormulaDrawer')?.classList.toggle('open');
+}
+
+function refreshCreditScoreDashboard(){
+  const { ranked } = evaluateStrictCreditScores(localLaporanKerja, creditPeriod);
+  creditLeaderboard = ranked;
+
+  const summaryPill = document.getElementById('credit3dSummaryPill');
+  if(summaryPill){
+    const totalValidAll = ranked.reduce((s, o) => s + o.validCount, 0);
+    summaryPill.innerHTML = `<i class="fas fa-check-circle" style="color:var(--success);"></i> ${ranked.length} Petugas • ${totalValidAll} Laporan Valid`;
+  }
+
+  if(ranked.length > 0){
+    if(!selectedCreditOfficerKey || !ranked.some(o => o.key === selectedCreditOfficerKey)){
+      selectedCreditOfficerKey = ranked[0].key;
+    }
+  } else {
+    selectedCreditOfficerKey = null;
+  }
+
+  renderCreditRankList();
+  renderSelectedOfficerAudit();
+  rebuildCreditScore3DBars();
+}
+
+function selectCreditOfficer(key){
+  selectedCreditOfficerKey = key;
+  renderCreditRankList();
+  renderSelectedOfficerAudit();
+  highlightSelectedBar3D();
+}
+
+function renderCreditRankList(){
+  const listEl = document.getElementById('creditRankList');
+  if(!listEl) return;
+  if(creditLeaderboard.length === 0){
+    listEl.innerHTML = `<div style="text-align:center;padding:24px 12px;opacity:.6;font-size:.8rem;border:1px dashed var(--glass-border);border-radius:14px;">Belum ada laporan pada periode ini.</div>`;
+    return;
+  }
+  listEl.innerHTML = creditLeaderboard.map((off, idx) => {
+    const rankClass = idx === 0 ? 'rank-1' : idx === 1 ? 'rank-2' : idx === 2 ? 'rank-3' : 'rank-other';
+    const isSelected = off.key === selectedCreditOfficerKey;
+    return `
+      <div class="credit-rank-item ${isSelected ? 'selected' : ''}" onclick="selectCreditOfficer('${escapeHTML(off.key)}')">
+        <div style="display:flex;align-items:center;gap:10px;min-width:0;">
+          <div class="rank-num ${rankClass}">#${idx + 1}</div>
+          <div style="min-width:0;">
+            <div style="font-weight:800;font-size:.86rem;color:var(--title);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHTML(off.nama)}</div>
+            <div style="font-size:.7rem;opacity:.75;">
+              <span style="color:${off.tier.color};font-weight:700;">${off.tier.label}</span> • ${off.validCount}/${off.totalSubmitted} valid • ${off.uniqueLocationsCount} lokasi
+            </div>
+          </div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <div style="font-size:1.05rem;font-weight:900;color:var(--accent);">${off.score}</div>
+          <div style="font-size:.62rem;opacity:.6;font-weight:700;">PTS</div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function renderSelectedOfficerAudit(){
+  const card = document.getElementById('selectedOfficerAuditCard');
+  if(!card) return;
+  const off = creditLeaderboard.find(o => o.key === selectedCreditOfficerKey);
+  if(!off){
+    card.innerHTML = `<div style="font-size:.8rem;opacity:.75;text-align:center;padding:12px 0;">Skor dasar petugas adalah <strong>0</strong>. Kirim laporan dengan foto & titik GPS berbeda minimal 30m untuk meningkatkan skor.</div>`;
+    return;
+  }
+  const rejectedTotal = off.rejectedNearCount + off.rejectedNoGpsCount + off.rejectedDupPhotoCount;
+  card.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+      <div>
+        <div style="font-size:.68rem;font-weight:800;color:${off.tier.color};text-transform:uppercase;letter-spacing:.5px;">${off.tier.label}</div>
+        <div style="font-size:1.05rem;font-weight:900;color:var(--title);">${escapeHTML(off.nama)}</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:1.5rem;font-weight:900;color:var(--accent);line-height:1;">${off.score} <span style="font-size:.7rem;">PTS</span></div>
+        <div style="font-size:.64rem;opacity:.65;">Skor Awal: 0</div>
+      </div>
+    </div>
+    <div class="audit-metric-grid">
+      <div class="audit-metric"><div class="m-val" style="color:var(--success);">${off.validCount}</div><div class="m-lbl">Lolos Audit (+${off.poinLaporanValid})</div></div>
+      <div class="audit-metric"><div class="m-val" style="color:#38bdf8;">${off.uniqueLocationsCount}</div><div class="m-lbl">Titik ≥30m (+${off.poinLokasiUnik})</div></div>
+      <div class="audit-metric"><div class="m-val" style="color:#a855f7;">${off.categories.size}</div><div class="m-lbl">Jenis Kerja (+${off.poinVariasiKerja})</div></div>
+      <div class="audit-metric"><div class="m-val" style="color:var(--accent);">${off.hariAktif}h</div><div class="m-lbl">Hari Aktif (+${off.poinKonsistensiHarian})</div></div>
+      <div class="audit-metric"><div class="m-val" style="color:var(--warning);">${off.hariTargetRajin}h</div><div class="m-lbl">Target ≥3/hr (+${off.poinBonusRajin})</div></div>
+      <div class="audit-metric"><div class="m-val" style="color:${rejectedTotal > 0 ? 'var(--error)' : 'var(--txt)'};">${rejectedTotal}</div><div class="m-lbl">Ditolak (&lt;30m/Dup)</div></div>
+    </div>
+    ${rejectedTotal > 0 ? `<div style="margin-top:8px;font-size:.68rem;color:var(--error);background:rgba(239,68,68,.1);padding:5px 8px;border-radius:8px;">⚠️ Audit menolak ${rejectedTotal} laporan (Jarak &lt;30m: ${off.rejectedNearCount}, Tanpa GPS: ${off.rejectedNoGpsCount}, Foto Duplikat: ${off.rejectedDupPhotoCount})</div>` : ''}
+  `;
+}
+
+/* ============ VISUALISASI THREE.JS 3D GRAPH ENGINE ============ */
+function initCreditScore3DScene(){
+  if(cs3d.animStarted || typeof THREE === 'undefined') return;
+  const wrapper = document.getElementById('creditScore3dWrapper');
+  const canvas = document.getElementById('creditScore3dCanvas');
+  if(!wrapper || !canvas) return;
+
+  const w = Math.max(280, wrapper.clientWidth || 500);
+  const h = Math.max(260, wrapper.clientHeight || 390);
+
+  cs3d.scene = new THREE.Scene();
+  cs3d.camera = new THREE.PerspectiveCamera(42, w / h, 0.1, 1000);
+  cs3d.camera.position.set(0, 7.5, 15.5);
+  cs3d.camera.lookAt(0, 2.2, 0);
+
+  cs3d.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  cs3d.renderer.setSize(w, h);
+  cs3d.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+  const ambient = new THREE.AmbientLight(0xffffff, 0.72);
+  cs3d.scene.add(ambient);
+
+  const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
+  dirLight.position.set(8, 16, 10);
+  cs3d.scene.add(dirLight);
+
+  const rimLight = new THREE.PointLight(0xfacc15, 0.85, 40);
+  rimLight.position.set(-8, 10, -8);
+  cs3d.scene.add(rimLight);
+
+  const stageGroup = new THREE.Group();
+  stageGroup.name = 'stageGroup';
+
+  const baseGeo = new THREE.CylinderGeometry(7.6, 8.1, 0.35, 48);
+  const baseMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, metalness: 0.55, roughness: 0.35 });
+  const baseMesh = new THREE.Mesh(baseGeo, baseMat);
+  baseMesh.position.y = -0.18;
+  stageGroup.add(baseMesh);
+
+  const ringGeo = new THREE.TorusGeometry(7.7, 0.06, 16, 64);
+  const ringMat = new THREE.MeshBasicMaterial({ color: 0xfacc15 });
+  const ringMesh = new THREE.Mesh(ringGeo, ringMat);
+  ringMesh.rotation.x = Math.PI / 2;
+  ringMesh.position.y = 0.01;
+  stageGroup.add(ringMesh);
+
+  const gridHelper = new THREE.PolarGridHelper(7.4, 12, 5, 48, 0x334155, 0x1e293b);
+  gridHelper.position.y = 0.01;
+  stageGroup.add(gridHelper);
+
+  cs3d.scene.add(stageGroup);
+  cs3d.stageGroup = stageGroup;
+
+  cs3d.chartPivot = new THREE.Group();
+  cs3d.scene.add(cs3d.chartPivot);
+
+  cs3d.raycaster = new THREE.Raycaster();
+  cs3d.pointer = new THREE.Vector2();
+
+  const onPointerDown = (clientX, clientY) => {
+    cs3d.isDragging = true;
+    cs3d.dragMoved = false;
+    cs3d.prevX = clientX;
+    cs3d.prevY = clientY;
+  };
+  const onPointerMove = (clientX, clientY) => {
+    if(!cs3d.isDragging) return;
+    const dx = clientX - cs3d.prevX;
+    const dy = clientY - cs3d.prevY;
+    if(Math.abs(dx) > 3 || Math.abs(dy) > 3) cs3d.dragMoved = true;
+    cs3d.targetRotY += dx * 0.009;
+    cs3d.targetRotX = Math.max(0.12, Math.min(0.85, cs3d.targetRotX + dy * 0.006));
+    cs3d.prevX = clientX;
+    cs3d.prevY = clientY;
+  };
+  const onPointerUp = (clientX, clientY) => {
+    if(cs3d.isDragging && !cs3d.dragMoved && clientX !== undefined){
+      pickCreditBar3D(clientX, clientY);
+    }
+    cs3d.isDragging = false;
+  };
+
+  canvas.addEventListener('mousedown', e => onPointerDown(e.clientX, e.clientY));
+  window.addEventListener('mousemove', e => onPointerMove(e.clientX, e.clientY));
+  window.addEventListener('mouseup', e => onPointerUp(e.clientX, e.clientY));
+
+  canvas.addEventListener('touchstart', e => {
+    if(e.touches.length === 1) onPointerDown(e.touches[0].clientX, e.touches[0].clientY);
+  }, { passive: true });
+  canvas.addEventListener('touchmove', e => {
+    if(e.touches.length === 1) onPointerMove(e.touches[0].clientX, e.touches[0].clientY);
+  }, { passive: true });
+  canvas.addEventListener('touchend', e => {
+    const t = e.changedTouches && e.changedTouches[0];
+    onPointerUp(t ? t.clientX : undefined, t ? t.clientY : undefined);
+  });
+
+  cs3d.animStarted = true;
+  animateCreditScore3D();
+}
+
+function resizeCreditScore3D(){
+  if(!cs3d.renderer || !cs3d.camera) return;
+  const wrapper = document.getElementById('creditScore3dWrapper');
+  if(!wrapper) return;
+  const w = wrapper.clientWidth;
+  const h = wrapper.clientHeight;
+  if(w <= 0 || h <= 0) return;
+  cs3d.camera.aspect = w / h;
+  cs3d.camera.updateProjectionMatrix();
+  cs3d.renderer.setSize(w, h);
+}
+
+function toggleCreditAutoSpin(){
+  cs3d.autoSpin = !cs3d.autoSpin;
+  const btn = document.getElementById('btnToggleAutoSpin');
+  if(btn) btn.innerHTML = `<i class="fas fa-sync-alt"></i> Putar: ${cs3d.autoSpin ? 'ON' : 'OFF'}`;
+}
+
+function resetCreditCamera(){
+  cs3d.targetRotY = 0;
+  cs3d.targetRotX = 0.34;
+}
+
+function create3DLabelSprite(rankIdx, nama, score, validCount, isLight){
+  const cv = document.createElement('canvas');
+  cv.width = 340;
+  cv.height = 140;
+  const ctx = cv.getContext('2d');
+
+  ctx.fillStyle = isLight ? 'rgba(255,255,255,0.92)' : 'rgba(5,8,16,0.88)';
+  ctx.strokeStyle = rankIdx === 0 ? '#facc15' : (isLight ? '#cbd5e1' : 'rgba(255,255,255,0.22)');
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.roundRect(10, 10, 320, 120, 22);
+  ctx.fill();
+  ctx.stroke();
+
+  const shortName = nama.length > 16 ? nama.slice(0, 15) + '…' : nama;
+  ctx.fillStyle = isLight ? '#1e293b' : '#ffffff';
+  ctx.font = '800 24px "Plus Jakarta Sans", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(`#${rankIdx + 1} ${shortName}`, 170, 48);
+
+  ctx.fillStyle = isLight ? '#0000ff' : '#facc15';
+  ctx.font = '900 32px "Plus Jakarta Sans", sans-serif';
+  ctx.fillText(`${score} PTS`, 170, 86);
+
+  ctx.fillStyle = '#10b981';
+  ctx.font = '700 18px "Plus Jakarta Sans", sans-serif';
+  ctx.fillText(`${validCount} laporan valid (≥30m)`, 170, 114);
+
+  const tex = new THREE.CanvasTexture(cv);
+  const mat = new THREE.SpriteMaterial({ map: tex, transparent: true });
+  const sprite = new THREE.Sprite(mat);
+  sprite.scale.set(2.85, 1.18, 1);
+  return sprite;
+}
+
+function rebuildCreditScore3DBars(){
+  if(!cs3d.chartPivot) return;
+  while(cs3d.chartPivot.children.length > 0){
+    cs3d.chartPivot.remove(cs3d.chartPivot.children[0]);
+  }
+  cs3d.barGroups = [];
+
+  const isLight = document.body.classList.contains('light-mode');
+  const topList = creditLeaderboard.slice(0, 8);
+  if(topList.length === 0) return;
+
+  const maxScore = Math.max(10, ...topList.map(o => o.score));
+  const count = topList.length;
+  const spacing = count <= 4 ? 2.4 : Math.min(2.1, 11.5 / count);
+  const startX = -((count - 1) * spacing) / 2;
+
+  topList.forEach((off, idx) => {
+    const normalizedH = off.score === 0 ? 0.14 : Math.max(0.45, (off.score / maxScore) * 5.2);
+    const group = new THREE.Group();
+    const xPos = startX + idx * spacing;
+    const zPos = Math.abs(idx - (count - 1) / 2) * 0.35;
+    group.position.set(xPos, 0, zPos);
+
+    const barGeo = new THREE.CylinderGeometry(0.56, 0.64, 1, 28);
+    const barMat = new THREE.MeshStandardMaterial({
+      color: off.tier.hex,
+      metalness: 0.35,
+      roughness: 0.28,
+      emissive: off.tier.hex,
+      emissiveIntensity: off.key === selectedCreditOfficerKey ? 0.32 : 0.08
+    });
+    const barMesh = new THREE.Mesh(barGeo, barMat);
+    barMesh.position.y = 0.07;
+    barMesh.scale.y = 0.14;
+    barMesh.userData = { officerKey: off.key };
+    group.add(barMesh);
+
+    const capGeo = new THREE.TorusGeometry(0.58, 0.045, 12, 32);
+    const capMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    const capMesh = new THREE.Mesh(capGeo, capMat);
+    capMesh.rotation.x = Math.PI / 2;
+    capMesh.position.y = 0.14;
+    group.add(capMesh);
+
+    const labelSprite = create3DLabelSprite(idx, off.nama, off.score, off.validCount, isLight);
+    labelSprite.position.y = 0.95;
+    group.add(labelSprite);
+
+    cs3d.chartPivot.add(group);
+    cs3d.barGroups.push({
+      key: off.key,
+      group,
+      barMesh,
+      capMesh,
+      labelSprite,
+      targetHeight: normalizedH,
+      currentHeight: 0.14
+    });
+  });
+}
+
+function highlightSelectedBar3D(){
+  cs3d.barGroups.forEach(item => {
+    const isSel = item.key === selectedCreditOfficerKey;
+    item.barMesh.material.emissiveIntensity = isSel ? 0.38 : 0.08;
+  });
+}
+
+function pickCreditBar3D(clientX, clientY){
+  if(!cs3d.raycaster || !cs3d.camera || !cs3d.renderer) return;
+  const rect = cs3d.renderer.domElement.getBoundingClientRect();
+  cs3d.pointer.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+  cs3d.pointer.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+  cs3d.raycaster.setFromCamera(cs3d.pointer, cs3d.camera);
+
+  const meshes = cs3d.barGroups.map(b => b.barMesh);
+  const hits = cs3d.raycaster.intersectObjects(meshes, false);
+  if(hits.length > 0 && hits[0].object.userData.officerKey){
+    selectCreditOfficer(hits[0].object.userData.officerKey);
+  }
+}
+
+function animateCreditScore3D(){
+  requestAnimationFrame(animateCreditScore3D);
+  if(!cs3d.renderer || !cs3d.scene || !cs3d.camera) return;
+
+  if(cs3d.autoSpin && !cs3d.isDragging){
+    cs3d.targetRotY += 0.0032;
+  }
+
+  cs3d.rotY += (cs3d.targetRotY - cs3d.rotY) * 0.08;
+  cs3d.rotX += (cs3d.targetRotX - cs3d.rotX) * 0.08;
+
+  if(cs3d.chartPivot) cs3d.chartPivot.rotation.y = cs3d.rotY;
+  if(cs3d.stageGroup) cs3d.stageGroup.rotation.y = cs3d.rotY;
+
+  const camDist = 15.8;
+  cs3d.camera.position.y = 3.2 + Math.sin(cs3d.rotX) * camDist;
+  cs3d.camera.position.z = Math.cos(cs3d.rotX) * camDist;
+  cs3d.camera.lookAt(0, 2.3, 0);
+
+  cs3d.barGroups.forEach(b => {
+    b.currentHeight += (b.targetHeight - b.currentHeight) * 0.09;
+    b.barMesh.scale.y = b.currentHeight;
+    b.barMesh.position.y = b.currentHeight / 2;
+    b.capMesh.position.y = b.currentHeight;
+    b.labelSprite.position.y = b.currentHeight + 0.85;
+  });
+
+  cs3d.renderer.render(cs3d.scene, cs3d.camera);
+}
+
+/* ============ PORTAL PUBLIK & LAPORAN KERJA REAL-TIME ============ */
+function openPublicPortal(){
+  document.getElementById('loginSection').style.display = 'none';
+  document.getElementById('main-content').style.display = 'none';
+  document.getElementById('publicReportPortal').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  fetchLaporanKerja();
+}
+function closePublicPortal(){
+  document.getElementById('publicReportPortal').style.display = 'none';
+  if(sessionStorage.getItem('isLoggedIn') === 'true'){
+    document.getElementById('main-content').style.display = 'block';
+    resizeCreditScore3D();
+  } else {
+    const l = document.getElementById('loginSection');
+    l.style.display = 'flex';
+    l.style.opacity = '1';
+  }
+}
+function copyPublicLink(){
+  const baseUrl = window.location.href.split('#')[0].split('?')[0];
+  const publicUrl = baseUrl + '?view=publik';
+  copyTextSafe(publicUrl, 'Link Laporan Publik berhasil disalin!');
+}
+
+function getCachedLaporan(){
+  try { return JSON.parse(localStorage.getItem('appis_laporan_kerja_cache') || '[]'); } catch(e){ return []; }
+}
+function saveCachedLaporan(list){
+  try {
+    const slim = list.slice(0, 30).map((item, idx) => ({
+      ...item,
+      foto: item.foto && item.foto.startsWith('data:') && idx > 6 ? '' : item.foto
+    }));
+    localStorage.setItem('appis_laporan_kerja_cache', JSON.stringify(slim));
+  } catch(e){}
+}
+
+async function fetchLaporanKerja(manualNotify = false){
+  const cached = getCachedLaporan();
+  if(localLaporanKerja.length === 0 && cached.length > 0){
+    localLaporanKerja = cached;
+    renderLaporanKerja();
+    refreshCreditScoreDashboard();
+  }
+  try {
+    const res = await apiGet({ action: 'getLaporanKerja' });
+    if(res.status === 'success' && Array.isArray(res.data)){
+      const serverIds = new Set(res.data.map(x => String(x.id)));
+      const unsyncedLocal = cached.filter(x => x._localOnly && !serverIds.has(String(x.id)));
+      localLaporanKerja = [...unsyncedLocal, ...res.data];
+      saveCachedLaporan(localLaporanKerja);
+      if(manualNotify) showToast('Data Laporan Kerja & Credit Score diperbarui', 'success');
+    } else if(manualNotify){
+      showToast('Menampilkan data laporan tersimpan', 'info');
+    }
+  } catch(e){
+    if(manualNotify) showToast('Mode offline: menampilkan riwayat tersimpan', 'warning');
+  }
+  renderLaporanKerja();
+  refreshCreditScoreDashboard();
+}
+
+function renderLaporanKerja(){
+  const { auditFlagsByReportId } = evaluateStrictCreditScores(localLaporanKerja, 'all');
+
+  const mainFeed = document.getElementById('laporanKerjaFeed');
+  if(mainFeed){
+    const q = (document.getElementById('laporanSearch')?.value || '').toLowerCase();
+    const kat = (document.getElementById('laporanFilterKategori')?.value || '').toLowerCase();
+    const filtered = localLaporanKerja.filter(item => {
+      const hay = `${item.id||''} ${item.namaPetugas||''} ${item.judulKegiatan||''} ${item.lokasiDetail||''} ${item.alamatGps||''} ${item.deskripsi||''}`.toLowerCase();
+      const matchQ = !q || hay.includes(q);
+      const matchK = !kat || String(item.kategori || '').toLowerCase() === kat;
+      return matchQ && matchK;
+    });
+    mainFeed.innerHTML = buildLaporanCardsHTML(filtered, auditFlagsByReportId);
+  }
+
+  const pubFeed = document.getElementById('publicLaporanFeed');
+  if(pubFeed){
+    const pq = (document.getElementById('publicLaporanSearch')?.value || '').toLowerCase();
+    const pkat = (document.getElementById('publicLaporanKategori')?.value || '').toLowerCase();
+    const pFiltered = localLaporanKerja.filter(item => {
+      const hay = `${item.id||''} ${item.namaPetugas||''} ${item.judulKegiatan||''} ${item.lokasiDetail||''} ${item.alamatGps||''} ${item.deskripsi||''}`.toLowerCase();
+      const matchQ = !pq || hay.includes(pq);
+      const matchK = !pkat || String(item.kategori || '').toLowerCase() === pkat;
+      return matchQ && matchK;
+    });
+    pubFeed.innerHTML = buildLaporanCardsHTML(pFiltered, auditFlagsByReportId);
+
+    const todayStr = getJakartaDateKey(new Date());
+    const todayCount = localLaporanKerja.filter(x => getJakartaDateKey(x.waktuRealtime) === todayStr).length;
+    const elTotal = document.getElementById('pubStatTotal');
+    const elToday = document.getElementById('pubStatToday');
+    const elLast = document.getElementById('pubStatLast');
+    if(elTotal) elTotal.textContent = localLaporanKerja.length;
+    if(elToday) elToday.textContent = todayCount;
+    if(elLast) elLast.textContent = localLaporanKerja[0] ? timeAgo(localLaporanKerja[0].waktuRealtime) : '-';
+  }
+}
+
+function buildLaporanCardsHTML(list, auditMap = {}){
+  if(!list || list.length === 0){
+    return `<div class="empty-state"><i class="fas fa-camera-retro"></i><h3>Belum Ada Laporan Kerja</h3><p style="font-size:.82rem;opacity:.7;margin-top:6px;">Klik "Buat Laporan" untuk mendokumentasikan pekerjaan lapangan secara real-time.</p></div>`;
+  }
+  return list.map((item, idx) => {
+    const foto = item.foto && /^(https?:|data:image\/)/i.test(item.foto) ? item.foto : '';
+    const coords = String(item.koordinat || '').trim();
+    const hasMap = coords.includes(',');
+    const waktuTampil = item.waktuFormatted || formatWaktuLokal(item.waktuRealtime);
+    const safeId = escapeHTML(String(item.id || ('LAP-' + idx)));
+    const audit = auditMap[String(item.id || ('REP-' + idx))];
+
+    const badgeHtml = audit && !audit.valid
+      ? `<span class="laporan-warn-pill"><i class="fas fa-exclamation-triangle"></i> ${escapeHTML(audit.reason)}</span>`
+      : `<span class="laporan-live-pill"><i class="fas fa-check-circle"></i> REAL-TIME VALID ${audit?.gapText ? '(' + escapeHTML(audit.gapText) + ')' : ''}</span>`;
+
+    return `
+    <div class="laporan-card">
+      <div class="laporan-img-wrap" onclick="openLaporanDetail('${safeId}')">
+        ${foto ? `<img src="${foto}" alt="Dokumentasi PPSU" loading="lazy" referrerpolicy="no-referrer" onerror="this.src='https://placehold.co/600x400/0b1220/facc15?text=Foto+Dokumentasi+PPSU'">` : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#64748b;"><i class="fas fa-image" style="font-size:2.5rem;"></i></div>`}
+        ${badgeHtml}
+        <span class="laporan-cat-pill">${escapeHTML(item.kategori || 'Operasional')}</span>
+      </div>
+      <div class="laporan-body">
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+            <span style="font-size:.68rem;font-weight:800;opacity:.6;">${safeId}</span>
+            <span style="font-size:.7rem;color:var(--success);font-weight:700;"><i class="fas fa-clock"></i> ${timeAgo(item.waktuRealtime)}</span>
+          </div>
+          <h4 style="color:var(--title);font-size:1rem;font-weight:800;margin-bottom:6px;line-height:1.35;">${escapeHTML(item.judulKegiatan || item.kategori)}</h4>
+          <p style="font-size:.82rem;opacity:.82;line-height:1.5;">${escapeHTML(item.deskripsi || '')}</p>
+        </div>
+        <div class="laporan-meta-grid">
+          <div class="laporan-meta-row"><i class="fas fa-user-shield"></i><span><strong>Petugas:</strong> ${escapeHTML(item.namaPetugas || 'Tim PPSU')}</span></div>
+          <div class="laporan-meta-row"><i class="fas fa-calendar-check"></i><span><strong>Waktu:</strong> ${escapeHTML(waktuTampil)}</span></div>
+          <div class="laporan-meta-row"><i class="fas fa-map-marker-alt"></i><span><strong>Lokasi:</strong> ${escapeHTML(item.lokasiDetail || item.alamatGps || '-')}</span></div>
+          ${hasMap ? `<div class="laporan-meta-row"><i class="fas fa-compass"></i><a href="https://www.google.com/maps?q=${encodeURIComponent(coords)}" target="_blank" onclick="event.stopPropagation()" style="color:var(--accent);font-weight:700;text-decoration:none;">GPS: ${escapeHTML(coords)} (Buka Peta ↗)</a></div>` : ''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+document.getElementById('laporanSearch')?.addEventListener('input', renderLaporanKerja);
+document.getElementById('laporanFilterKategori')?.addEventListener('change', renderLaporanKerja);
+document.getElementById('publicLaporanSearch')?.addEventListener('input', renderLaporanKerja);
+document.getElementById('publicLaporanKategori')?.addEventListener('change', renderLaporanKerja);
+
+function openLaporanDetail(id){
+  const item = localLaporanKerja.find(x => String(x.id) === String(id));
+  if(!item) return;
+  const foto = item.foto && /^(https?:|data:image\/)/i.test(item.foto) ? item.foto : '';
+  const coords = String(item.koordinat || '').trim();
+  const waktuTampil = item.waktuFormatted || formatWaktuLokal(item.waktuRealtime);
+  document.getElementById('laporanDetailBody').innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+      <span style="font-size:.75rem;font-weight:800;opacity:.7;">${escapeHTML(item.id)}</span>
+      <span class="request-status status-done"><i class="fas fa-globe"></i> Laporan Publik</span>
+    </div>
+    <h4 style="color:var(--title);font-size:1.15rem;margin-bottom:8px;">${escapeHTML(item.judulKegiatan || item.kategori)}</h4>
+    <p style="font-size:.85rem;opacity:.85;line-height:1.6;margin-bottom:14px;">${escapeHTML(item.deskripsi || '')}</p>
+    ${foto ? `<div class="photo-container"><span class="photo-label"><i class="fas fa-camera"></i> Foto Bukti Real-Time (Dengan Watermark Waktu & GPS)</span><img src="${foto}" class="photo-preview" style="max-height:380px;" referrerpolicy="no-referrer"></div>` : ''}
+    <div style="background:rgba(255,255,255,.03);border:1px solid var(--glass-border);border-radius:14px;padding:14px;font-size:.82rem;line-height:1.9;">
+      <div><i class="fas fa-user-shield" style="color:var(--accent);width:20px;"></i> <strong>Petugas:</strong> ${escapeHTML(item.namaPetugas || '-')}</div>
+      <div><i class="fas fa-layer-group" style="color:var(--accent);width:20px;"></i> <strong>Bidang:</strong> ${escapeHTML(item.kategori || '-')}</div>
+      <div><i class="fas fa-clock" style="color:var(--accent);width:20px;"></i> <strong>Waktu Real-Time:</strong> ${escapeHTML(waktuTampil)}</div>
+      <div><i class="fas fa-map-pin" style="color:var(--accent);width:20px;"></i> <strong>Lokasi Kegiatan:</strong> ${escapeHTML(item.lokasiDetail || '-')}</div>
+      ${item.alamatGps ? `<div><i class="fas fa-road" style="color:var(--accent);width:20px;"></i> <strong>Alamat Satelit:</strong> ${escapeHTML(item.alamatGps)}</div>` : ''}
+      ${coords.includes(',') ? `<div style="margin-top:6px;"><a href="https://www.google.com/maps?q=${encodeURIComponent(coords)}" target="_blank" class="btn-3d" style="background:var(--accent);color:#000;padding:10px;font-size:.82rem;text-decoration:none;"><i class="fas fa-map-marked-alt"></i> Lihat Titik Lokasi di Google Maps (${escapeHTML(coords)})</a></div>` : ''}
+    </div>
+  `;
+  document.getElementById('modalLaporanDetail').style.display = 'flex';
+}
+
+/* ============ KAMERA LIVE, AUDIT JARAK >= 30M & WATERMARK OTOMATIS ============ */
+function checkLiveDistanceAgainstToday(officerName, coordsStr){
+  const banner = document.getElementById('lapDistanceAuditBanner');
+  if(!banner) return { ok: true, minDist: Infinity };
+
+  const cur = parseCoords(coordsStr);
+  if(!cur){
+    banner.style.display = 'none';
+    return { ok: false, minDist: null };
+  }
+
+  const key = String(officerName || '').trim().toLowerCase();
+  const todayStr = getJakartaDateKey(new Date());
+  let minDist = Infinity;
+
+  localLaporanKerja.forEach(r => {
+    if(String(r.namaPetugas || '').trim().toLowerCase() !== key) return;
+    if(getJakartaDateKey(r.waktuRealtime || r.waktuFormatted) !== todayStr) return;
+    const prev = parseCoords(r.koordinat);
+    if(prev){
+      const d = haversine(prev, cur);
+      if(d !== null && d < minDist) minDist = d;
+    }
+  });
+
+  banner.style.display = 'block';
+  if(!isFinite(minDist)){
+    banner.style.color = 'var(--success)';
+    banner.innerHTML = `<i class="fas fa-check-circle"></i> Titik lokasi pertama hari ini — <strong>Memenuhi syarat Credit Score</strong>`;
+    return { ok: true, minDist: Infinity };
+  } else if(minDist >= MIN_DISTANCE_METERS){
+    banner.style.color = 'var(--success)';
+    banner.innerHTML = `<i class="fas fa-check-circle"></i> Jarak dari titik sebelumnya: <strong>${Math.round(minDist)} meter</strong> (≥ ${MIN_DISTANCE_METERS}m) — <strong>Lolos Audit Skor</strong>`;
+    return { ok: true, minDist };
+  } else {
+    banner.style.color = 'var(--error)';
+    banner.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Jarak dari titik sebelumnya hanya <strong>${Math.round(minDist)} meter</strong> (Minimal <strong>${MIN_DISTANCE_METERS}m</strong> agar skor bertambah).`;
+    return { ok: false, minDist };
+  }
+}
+
+document.getElementById('lapNamaPetugas')?.addEventListener('input', (e) => {
+  if(lapCurrentCoords) checkLiveDistanceAgainstToday(e.target.value, lapCurrentCoords);
+});
+
+function openLaporanKerjaForm(){
+  document.getElementById('modalLaporanKerjaForm').style.display = 'flex';
+  const namaInp = document.getElementById('lapNamaPetugas');
+  if(namaInp && currentUser?.nama && !namaInp.value) namaInp.value = currentUser.nama;
+  resetLapCam();
+  startLapLiveClockAndGps();
+}
+
+function closeLaporanKerjaForm(){
+  resetLapCam();
+  stopLapLiveClockAndGps();
+  document.getElementById('modalLaporanKerjaForm').style.display = 'none';
+}
+
+function startLapLiveClockAndGps(){
+  stopLapLiveClockAndGps();
+  const updateClock = () => {
+    const nowStr = formatWaktuLengkapWIB(new Date());
+    const el1 = document.getElementById('lapLiveClockText');
+    const el2 = document.getElementById('hudTime');
+    if(el1) el1.textContent = nowStr;
+    if(el2) el2.textContent = nowStr;
+  };
+  updateClock();
+  pollTimers.lapClock = setInterval(updateClock, 1000);
+
+  const gpsEl = document.getElementById('lapGpsStatusText');
+  const addrEl = document.getElementById('lapAddressAutoText');
+  const hudCoords = document.getElementById('hudCoords');
+  const hudAddr = document.getElementById('hudAddr');
+
+  if(!navigator.geolocation){
+    if(gpsEl) gpsEl.innerHTML = '<span style="color:var(--error);">Browser tidak mendukung GPS</span>';
+    return;
+  }
+
+  let lastGeocoded = '';
+  lapWatchId = navigator.geolocation.watchPosition(async (pos) => {
+    const lat = pos.coords.latitude.toFixed(6);
+    const lng = pos.coords.longitude.toFixed(6);
+    const acc = Math.round(pos.coords.accuracy || 0);
+    lapCurrentCoords = `${lat},${lng}`;
+
+    if(gpsEl) gpsEl.innerHTML = `<span style="color:var(--success);">🟢 ${lat}, ${lng} (±${acc}m)</span>`;
+    if(hudCoords) hudCoords.textContent = `GPS: ${lat}, ${lng} (Akurasi ±${acc}m)`;
+
+    const namaVal = document.getElementById('lapNamaPetugas')?.value || '';
+    checkLiveDistanceAgainstToday(namaVal, lapCurrentCoords);
+
+    const shortKey = `${pos.coords.latitude.toFixed(4)},${pos.coords.longitude.toFixed(4)}`;
+    if(shortKey !== lastGeocoded){
+      lastGeocoded = shortKey;
+      try {
+        const r = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`);
+        const d = await r.json();
+        if(d && d.display_name){
+          const parts = d.display_name.split(',').slice(0, 4).join(', ');
+          lapCurrentAddress = parts;
+          if(addrEl) addrEl.textContent = '📍 ' + parts;
+          if(hudAddr) hudAddr.textContent = parts;
+        }
+      } catch(err){
+        if(addrEl) addrEl.textContent = '📍 Area Kelurahan Pisangan Baru, Jakarta Timur';
+      }
+    }
+  }, (err) => {
+    if(gpsEl) gpsEl.innerHTML = '<span style="color:var(--error);">⚠️ Aktifkan izin lokasi GPS</span>';
+  }, { enableHighAccuracy: true, maximumAge: 5000, timeout: 15000 });
+}
+
+function stopLapLiveClockAndGps(){
+  clearInterval(pollTimers.lapClock);
+  if(lapWatchId !== null && navigator.geolocation){
+    navigator.geolocation.clearWatch(lapWatchId);
+    lapWatchId = null;
+  }
+}
+
+async function startLapCam(){
+  try {
+    if(lapCamStream){ lapCamStream.getTracks().forEach(t => t.stop()); lapCamStream = null; }
+    lapCamStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: lapFacingMode, width: { ideal: 1280 }, height: { ideal: 960 } },
+      audio: false
+    });
+    const v = document.getElementById('lapCamVideo');
+    const box = document.getElementById('lapCamBox');
+    v.srcObject = lapCamStream;
+    v.style.display = 'block';
+    box.classList.toggle('rear-cam', lapFacingMode === 'environment');
+
+    document.getElementById('lapCamPlaceholder').style.display = 'none';
+    document.getElementById('lapCamSnapshot').style.display = 'none';
+    document.getElementById('lapCamHud').style.display = 'block';
+    document.getElementById('btnBukaLapCam').style.display = 'none';
+    document.getElementById('btnAmbilLapCam').style.display = 'flex';
+    document.getElementById('btnUlangiLapCam').style.display = 'none';
+    document.getElementById('btnSwitchLapCam').style.display = 'inline-block';
+  } catch(err){
+    showToast('Gagal mengakses kamera: ' + err.message, 'error');
+  }
+}
+
+function switchLapCamera(){
+  lapFacingMode = lapFacingMode === 'environment' ? 'user' : 'environment';
+  startLapCam();
+}
+
+function computeVisualHashFromVideo(videoEl){
+  try {
+    const tcv = document.createElement('canvas');
+    tcv.width = 16;
+    tcv.height = 16;
+    const tctx = tcv.getContext('2d');
+    tctx.drawImage(videoEl, 0, 0, 16, 16);
+    const data = tctx.getImageData(0, 0, 16, 16).data;
+    let sum = 0;
+    const grays = [];
+    for(let i = 0; i < data.length; i += 4){
+      const g = Math.round(data[i] * 0.299 + data[i+1] * 0.587 + data[i+2] * 0.114);
+      grays.push(g);
+      sum += g;
+    }
+    const avg = sum / grays.length;
+    let bits = '';
+    for(let i = 0; i < grays.length; i += 4){
+      const nibble = ((grays[i] >= avg ? 8 : 0) | (grays[i+1] >= avg ? 4 : 0) | (grays[i+2] >= avg ? 2 : 0) | (grays[i+3] >= avg ? 1 : 0));
+      bits += nibble.toString(16);
+    }
+    return 'VH-' + bits;
+  } catch(e){
+    return 'VH-' + Date.now();
+  }
+}
+
+function captureLapCam(){
+  const v = document.getElementById('lapCamVideo');
+  if(!v.videoWidth) return showToast('Kamera belum siap, tunggu sebentar', 'warning');
+
+  lapCapturedHash = computeVisualHashFromVideo(v);
+
+  const maxW = 1024;
+  const scale = Math.min(1, maxW / v.videoWidth);
+  const cv = document.createElement('canvas');
+  cv.width = Math.round(v.videoWidth * scale);
+  cv.height = Math.round(v.videoHeight * scale);
+  const ctx = cv.getContext('2d');
+
+  if(lapFacingMode === 'user'){
+    ctx.translate(cv.width, 0);
+    ctx.scale(-1, 1);
+  }
+  ctx.drawImage(v, 0, 0, cv.width, cv.height);
+  if(lapFacingMode === 'user') ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+  // Stempel Watermark Real-Time Waktu & Lokasi di atas foto
+  const pad = Math.round(cv.width * 0.025);
+  const barH = Math.round(cv.height * 0.17);
+  const y0 = cv.height - barH;
+
+  ctx.fillStyle = 'rgba(5, 8, 16, 0.78)';
+  ctx.fillRect(0, y0, cv.width, barH);
+
+  ctx.fillStyle = '#facc15';
+  ctx.fillRect(0, y0, cv.width, Math.max(3, Math.round(cv.height * 0.005)));
+
+  const fontHeader = Math.max(12, Math.round(cv.width * 0.022));
+  const fontSub = Math.max(11, Math.round(cv.width * 0.018));
+
+  const namaPetugas = (document.getElementById('lapNamaPetugas').value.trim() || currentUser?.nama || 'Petugas PPSU');
+  const waktuStamp = formatWaktuLengkapWIB(new Date());
+  const gpsStamp = lapCurrentCoords ? `GPS: ${lapCurrentCoords}` : 'GPS: Wajib Aktif';
+  const lokasiInput = document.getElementById('lapLokasiDetail').value.trim();
+  const alamatStamp = lokasiInput ? `${lokasiInput} (${lapCurrentAddress})` : lapCurrentAddress;
+
+  ctx.fillStyle = '#facc15';
+  ctx.font = `800 ${fontHeader}px "Plus Jakarta Sans", sans-serif`;
+  ctx.fillText(`APPIS PPSU PISANGAN BARU  •  ${waktuStamp}`, pad, y0 + Math.round(barH * 0.32));
+
+  ctx.fillStyle = '#ffffff';
+  ctx.font = `600 ${fontSub}px "Plus Jakarta Sans", sans-serif`;
+  ctx.fillText(`Petugas: ${namaPetugas}  |  ${gpsStamp}`, pad, y0 + Math.round(barH * 0.62));
+
+  ctx.fillStyle = '#cbd5e1';
+  ctx.font = `400 ${Math.max(10, Math.round(fontSub * 0.92))}px "Plus Jakarta Sans", sans-serif`;
+  const maxChars = Math.floor((cv.width - pad * 2) / (fontSub * 0.52));
+  const trimmedAddr = alamatStamp.length > maxChars ? alamatStamp.slice(0, maxChars - 3) + '...' : alamatStamp;
+  ctx.fillText(`Lokasi: ${trimmedAddr}`, pad, y0 + Math.round(barH * 0.88));
+
+  lapCamCaptured = cv.toDataURL('image/jpeg', 0.82);
+  const snap = document.getElementById('lapCamSnapshot');
+  snap.src = lapCamCaptured;
+  snap.style.display = 'block';
+  v.style.display = 'none';
+  document.getElementById('lapCamHud').style.display = 'none';
+  document.getElementById('btnSwitchLapCam').style.display = 'none';
+
+  if(lapCamStream){ lapCamStream.getTracks().forEach(t => t.stop()); lapCamStream = null; }
+  document.getElementById('btnAmbilLapCam').style.display = 'none';
+  document.getElementById('btnUlangiLapCam').style.display = 'flex';
+  showToast('Foto real-time berhasil distempel waktu & lokasi!', 'success');
+}
+
+function retakeLapCam(){
+  lapCamCaptured = null;
+  lapCapturedHash = '';
+  startLapCam();
+}
+
+function resetLapCam(){
+  lapCamCaptured = null;
+  lapCapturedHash = '';
+  if(lapCamStream){ lapCamStream.getTracks().forEach(t => t.stop()); lapCamStream = null; }
+  const v = document.getElementById('lapCamVideo'); if(v) v.style.display = 'none';
+  const s = document.getElementById('lapCamSnapshot'); if(s) s.style.display = 'none';
+  const p = document.getElementById('lapCamPlaceholder'); if(p) p.style.display = 'flex';
+  const h = document.getElementById('lapCamHud'); if(h) h.style.display = 'none';
+  const sw = document.getElementById('btnSwitchLapCam'); if(sw) sw.style.display = 'none';
+  const b1 = document.getElementById('btnBukaLapCam'); if(b1) b1.style.display = 'flex';
+  const b2 = document.getElementById('btnAmbilLapCam'); if(b2) b2.style.display = 'none';
+  const b3 = document.getElementById('btnUlangiLapCam'); if(b3) b3.style.display = 'none';
+  const banner = document.getElementById('lapDistanceAuditBanner'); if(banner) banner.style.display = 'none';
+}
+
+async function submitLaporanKerja(e){
+  e.preventDefault();
+  if(!lapCamCaptured) return showToast('Wajib ambil foto bukti lapangan secara langsung!', 'warning');
+
+  const namaPetugas = document.getElementById('lapNamaPetugas').value.trim();
+  const kategori = document.getElementById('lapKategori').value;
+  const judulKegiatan = document.getElementById('lapJudul').value.trim();
+  const lokasiDetail = document.getElementById('lapLokasiDetail').value.trim();
+  const deskripsi = document.getElementById('lapDeskripsi').value.trim();
+
+  if(!namaPetugas || !kategori || !judulKegiatan || !lokasiDetail){
+    return showToast('Lengkapi semua kolom wajib!', 'warning');
+  }
+
+  let coords = lapCurrentCoords;
+  if(!coords){
+    try { coords = await getLocation(); } catch(err){ coords = ''; }
+  }
+  if(!parseCoords(coords)){
+    return showToast('Koordinat GPS wajib aktif & valid agar laporan terverifikasi!', 'error');
+  }
+
+  const distAudit = checkLiveDistanceAgainstToday(namaPetugas, coords);
+  if(!distAudit.ok){
+    return showToast(`Jarak lokasi baru ${Math.round(distAudit.minDist || 0)}m (< ${MIN_DISTANCE_METERS}m dari titik sebelumnya hari ini). Pindah minimal 30m agar adil & valid!`, 'error', 5000);
+  }
+
+  const now = new Date();
+  const waktuRealtime = now.toISOString();
+  const waktuFormatted = formatWaktuLengkapWIB(now);
+  const tempId = 'LAP-' + now.getFullYear() + String(now.getMonth()+1).padStart(2,'0') + String(now.getDate()).padStart(2,'0') + '-' + String(now.getHours()).padStart(2,'0') + String(now.getMinutes()).padStart(2,'0') + String(now.getSeconds()).padStart(2,'0');
+
+  const btn = document.getElementById('btnSubmitLaporan');
+  const orig = btn.innerHTML;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> MENYIMPAN LAPORAN...';
+  btn.disabled = true;
+
+  const payload = {
+    action: 'createLaporanKerja',
+    id: tempId,
+    namaPetugas,
+    petugasId: currentUser?.petugasId || '',
+    kategori,
+    judulKegiatan,
+    lokasiDetail,
+    koordinat: coords,
+    alamatGps: lapCurrentAddress,
+    waktuRealtime,
+    waktuFormatted,
+    deskripsi,
+    fotoHash: lapCapturedHash,
+    fotoBase64: lapCamCaptured,
+    publik: true
+  };
+
+  try {
+    const res = await apiCall(payload);
+    if(res && res.status === 'success'){
+      const newRecord = {
+        ...payload,
+        id: res.id || tempId,
+        foto: res.foto || lapCamCaptured,
+        _localOnly: false
+      };
+      delete newRecord.fotoBase64;
+      localLaporanKerja.unshift(newRecord);
+      saveCachedLaporan(localLaporanKerja);
+      renderLaporanKerja();
+      refreshCreditScoreDashboard();
+      showToast('Laporan valid terkirim & Credit Score 3D diperbarui!', 'success', 4500);
+      e.target.reset();
+      closeLaporanKerjaForm();
+    } else {
+      throw new Error(res?.message || 'Gagal sinkronisasi server');
+    }
+  } catch(err){
+    const fallbackRecord = {
+      ...payload,
+      foto: lapCamCaptured,
+      _localOnly: true
+    };
+    delete fallbackRecord.fotoBase64;
+    localLaporanKerja.unshift(fallbackRecord);
+    saveCachedLaporan(localLaporanKerja);
+    renderLaporanKerja();
+    refreshCreditScoreDashboard();
+    showToast('Laporan tersimpan & Credit Score 3D diperbarui!', 'success', 4000);
+    e.target.reset();
+    closeLaporanKerjaForm();
+  } finally {
+    btn.innerHTML = orig;
+    btn.disabled = false;
+  }
+}
+
+/* ============ INFO (EXISTING - TIDAK DIUBAH) ============ */
+async function fetchInfo(){ try{ const res = await apiGet({ action:'getInfo' }); if(res.status === 'success' && Array.isArray(res.data)) localInfo = res.data; }catch(e){} renderInfo(); }
+function renderInfo(){
+  const feed = document.getElementById('infoFeed'), q = (document.getElementById('infoSearch')?.value || '').toLowerCase();
+  const filtered = localInfo.filter(i => !q || ((i.judul||'') + ' ' + (i.deskripsi||'')).toLowerCase().includes(q));
+  if(filtered.length === 0){ feed.innerHTML = `<div class="empty-state"><i class="fas fa-bullhorn"></i><h3>Belum Ada Info</h3></div>`; return; }
+  feed.innerHTML = filtered.map(item => {
+    const foto = item.foto && /^(https?:|data:image\/)/i.test(item.foto) ? item.foto : '';
+    return `<div class="crm-card"><div><div style="display:flex;justify-content:space-between;margin-bottom:10px;"><span class="crm-badge badge-selesai">${escapeHTML(item.kategori)}</span><span style="font-size:.7rem;opacity:.6;">${formatWaktuLokal(item.tanggal)}</span></div><h4 style="color:var(--title);font-size:1.1rem;margin-bottom:8px;">${escapeHTML(item.judul)}</h4><p style="font-size:.85rem;opacity:.85;line-height:1.6;margin-bottom:12px;">${escapeHTML(item.deskripsi)}</p>${foto ? `<img src="${foto}" style="width:100%;border-radius:12px;" loading="lazy" referrerpolicy="no-referrer" onerror="this.src='https://placehold.co/600x400/050810/ffffff?text=Foto+Gagal+Dimuat'">` : ''}</div></div>`;
+  }).join('');
+}
+document.getElementById('infoSearch')?.addEventListener('input', renderInfo);
+function openAddInfoModal(){ document.getElementById('modalAddInfo').style.display = 'flex'; }
+function closeModal(id){ document.getElementById(id).style.display = 'none'; }
+async function submitInfo(e){
+  e.preventDefault(); const btn = e.target.querySelector('button[type="submit"]'); const orig = btn.innerText; btn.innerText = 'MEMPOSTING...'; btn.disabled = true;
+  try{
+    let fotoBase64 = ''; const file = document.getElementById('infoFoto').files[0];
+    if(file){ if(file.size > 5*1024*1024) throw new Error('Foto max 5MB'); fotoBase64 = await compressImage(file); }
+    const payload = { action:'createInfo', judul: document.getElementById('infoJudul').value.trim(), kategori: document.getElementById('infoKategori').value, deskripsi: document.getElementById('infoDeskripsi').value.trim(), fotoBase64: fotoBase64, penulis: currentUser?.nama || 'Admin PPSU' };
+    const res = await apiCall(payload); if(res.status !== 'success') throw new Error(res.message || 'Gagal');
+    showToast('Info diposting', 'success'); closeModal('modalAddInfo'); e.target.reset(); fetchInfo();
+  }catch(err){ showToast(err.message || 'Gagal posting', 'error'); } finally{ btn.innerText = orig; btn.disabled = false; }
+}
+
+/* ============ REQUESTS (EXISTING - TIDAK DIUBAH) ============ */
+async function fetchRequests(){ try{ const res = await apiGet({ action:'getRequests' }); if(res.status === 'success' && Array.isArray(res.data)) localRequests = res.data; }catch(e){} renderRequests(); }
+
+function renderRequests(){
+  const feed = document.getElementById('requestFeed'); if(!feed) return;
+  const q = (document.getElementById('requestSearch')?.value || '').toLowerCase(), f = (document.getElementById('requestFilter')?.value || '').toLowerCase();
+  const filtered = localRequests.filter(r => {
+    const matchQ = !q || ((r.id||'') + ' ' + (r.alamat||'') + ' ' + (r.kategori||'') + ' ' + (r.deskripsi||'')).toLowerCase().includes(q);
+    const matchF = !f || String(r.status || '').toLowerCase().trim() === f;
+    return matchQ && matchF;
+  });
+  if(filtered.length === 0){ feed.innerHTML = `<div class="empty-state"><i class="fas fa-inbox"></i><h3>Belum Ada Permintaan</h3></div>`; return; }
+  
+  const sm = { pending:{l:'Menunggu',c:'status-pending'}, accepted:{l:'Diterima',c:'status-accepted'}, progress:{l:'Diproses',c:'status-progress'}, pending_validation:{l:'Validasi Admin',c:'status-pending_validation'}, done:{l:'Selesai',c:'status-done'} };
+  const canUpdate = isStaffUser(currentUser);
+  
+  feed.innerHTML = filtered.map(r => {
+    const status = String(r.status || 'pending').toLowerCase().trim(), st = sm[status] || sm.pending;
+    const foto = r.foto && /^(https?:|data:image\/)/i.test(r.foto) ? r.foto : '';
+    const safeId = escapeHTML(String(r.id || 'unknown').trim());
+    
+    let actionBtns = '';
+    if(canUpdate && status==='pending') actionBtns += `<button class="req-btn primary" data-id="${safeId}" data-action="status" data-status="accepted">Terima</button>`;
+    if(canUpdate && status==='accepted') actionBtns += `<button class="req-btn primary" data-id="${safeId}" data-action="status" data-status="progress">Mulai</button>`;
+    if(canUpdate && status==='progress') actionBtns += `<button class="req-btn success" data-id="${safeId}" data-action="complete">Selesaikan</button>`;
+    
+    return `<div class="request-card ${status==='pending'?'urgent':''}" data-id="${safeId}" data-action="detail">
+      <div class="request-header"><span class="request-id">${safeId}</span><span class="request-status ${st.c}">${st.l}</span></div>
+      <div class="request-cat"><i class="fas fa-tag"></i> ${escapeHTML(r.kategori)}</div>
+      <div class="request-title">${escapeHTML(r.judul || r.kategori)}</div>
+      <div class="request-desc">${escapeHTML(String(r.deskripsi||'').substring(0,100))}...</div>
+      <div class="request-meta"><span><i class="fas fa-map-marker-alt"></i>${escapeHTML(r.alamat)}</span><span><i class="fas fa-clock"></i>${timeAgo(r.createdAt)}</span></div>
+      ${foto ? `<img src="${foto}" class="request-photo" loading="lazy" referrerpolicy="no-referrer" onerror="this.src='https://placehold.co/600x400/050810/ffffff?text=Foto+Gagal+Dimuat'">` : ''}
+      <div class="request-actions">${actionBtns}<button class="req-btn ghost" data-id="${safeId}" data-action="detail">Lihat Detail</button></div>
+    </div>`;
+  }).join('');
+  
+  feed.querySelectorAll('[data-action]').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.stopPropagation(); const action = el.dataset.action, id = el.dataset.id;
+      if (action === 'detail') openRequestDetail(id);
+      else if (action === 'status') updateRequestStatus(id, el.dataset.status);
+      else if (action === 'complete') openCompleteWork(id);
+    });
+  });
+}
+document.getElementById('requestSearch')?.addEventListener('input', renderRequests);
+document.getElementById('requestFilter')?.addEventListener('change', renderRequests);
+
+function openRequestForm(){
+  document.getElementById('modalRequestForm').style.display = 'flex';
+  resetReqCam();
+
+  const infoEl = document.getElementById('reqLokasiInfo');
+  infoEl.innerHTML = '📍 Mendeteksi lokasi...';
+  getLocation().then(loc => {
+    infoEl.innerHTML = `📍 Lokasi terdeteksi. <a href="https://www.google.com/maps?q=${loc}" target="_blank" style="color:var(--accent);">[Lihat Peta]</a>`;
+    infoEl.dataset.lokasi = loc;
+  }).catch(() => {
+    infoEl.innerHTML = '⚠️ Gagal deteksi GPS. Aktifkan izin lokasi.';
+    infoEl.style.color = 'var(--error)';
+  });
+}
+function closeRequestForm(){ resetReqCam(); document.getElementById('modalRequestForm').style.display = 'none'; }
+
+async function startReqCam() {
+  try {
+    reqCamStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment', width: {ideal:1280} }, audio: false });
+    const v = document.getElementById('reqCamVideo'); v.srcObject = reqCamStream; v.style.display = 'block';
+    document.getElementById('reqCamPlaceholder').style.display = 'none'; document.getElementById('reqCamSnapshot').style.display = 'none';
+    document.getElementById('btnBukaReqCam').style.display = 'none'; document.getElementById('btnAmbilReqCam').style.display = 'flex'; document.getElementById('btnUlangiReqCam').style.display = 'none';
+  } catch(err) { showToast('Kamera gagal: ' + err.message, 'error'); }
+}
+function captureReqCam() {
+  const v = document.getElementById('reqCamVideo'); if(!v.videoWidth) return showToast('Kamera belum siap', 'warning');
+  const cv = document.createElement('canvas'); cv.width = v.videoWidth; cv.height = v.videoHeight; cv.getContext('2d').drawImage(v,0,0);
+  reqCamCaptured = cv.toDataURL('image/jpeg', 0.8);
+  document.getElementById('reqCamSnapshot').src = reqCamCaptured; document.getElementById('reqCamSnapshot').style.display = 'block'; v.style.display = 'none';
+  if(reqCamStream){ reqCamStream.getTracks().forEach(t=>t.stop()); reqCamStream = null; }
+  document.getElementById('btnAmbilReqCam').style.display = 'none'; document.getElementById('btnUlangiReqCam').style.display = 'flex';
+}
+function retakeReqCam(){ resetReqCam(); startReqCam(); }
+function resetReqCam() {
+  reqCamCaptured = null; if(reqCamStream){ reqCamStream.getTracks().forEach(t=>t.stop()); reqCamStream = null; }
+  const v = document.getElementById('reqCamVideo'); if(v) v.style.display = 'none';
+  const s = document.getElementById('reqCamSnapshot'); if(s) s.style.display = 'none';
+  const p = document.getElementById('reqCamPlaceholder'); if(p) p.style.display = 'flex';
+  document.getElementById('btnBukaReqCam').style.display = 'flex'; document.getElementById('btnAmbilReqCam').style.display = 'none'; document.getElementById('btnUlangiReqCam').style.display = 'none';
+  document.getElementById('reqLokasiInfo').style.color = '';
+}
+
+async function submitRequest(e){
+  e.preventDefault();
+  if(!reqCamCaptured) return showToast('Ambil foto live lokasi terlebih dahulu!', 'warning');
+
+  const nama = document.getElementById('reqNama').value.trim();
+  const phone = document.getElementById('reqPhone').value.trim();
+  if(!nama) return showToast('Nama lengkap wajib diisi!', 'warning');
+  if(!phone) return showToast('Nomor WhatsApp wajib diisi!', 'warning');
+  
+  const infoEl = document.getElementById('reqLokasiInfo');
+  let lokasi = infoEl.dataset.lokasi || '';
+  if(!lokasi) {
+    try { lokasi = await getLocation(); } 
+    catch(e) { return showToast('GPS wajib aktif untuk permintaan!', 'error'); }
+  }
+
+  const btn = e.target.querySelector('button[type="submit"]'); const orig = btn.innerText; btn.innerText = 'MENGIRIM...'; btn.disabled = true;
+  try{
+    const payload = {
+      action:'createRequest', nama: nama, phone: phone,
+      kategori: document.getElementById('reqKategori').value, alamat: document.getElementById('reqAlamat').value.trim(),
+      deskripsi: document.getElementById('reqDeskripsi').value.trim(), fotoBase64: reqCamCaptured, lokasi: lokasi
+    };
+    const res = await apiCall(payload); if(res.status !== 'success') throw new Error(res.message || 'Gagal');
+    showToast('Permintaan terkirim!', 'success');
+    e.target.reset(); closeRequestForm(); fetchRequests();
+  }catch(err){ showToast(err.message || 'Gagal mengirim', 'error'); } finally{ btn.innerText = orig; btn.disabled = false; }
+}
+
+async function updateRequestStatus(id, status, closeAfter = false){
+  try{
+    const res = await apiCall({ action:'updateRequestStatus', id, status, petugasId: currentUser?.petugasId || '', petugasName: currentUser?.nama || '' });
+    if(res.status !== 'success') throw new Error(res.message);
+    showToast('Status diperbarui', 'success'); fetchRequests();
+    if (closeAfter) closeModal('modalRequestDetail');
+  }catch(err){ showToast('Gagal: ' + err.message, 'error'); }
+}
+
+function openRequestDetail(id) {
+  try {
+    const strId = String(id || '').trim();
+    const r = localRequests.find(x => String(x.id || '').trim() === strId);
+    if (!r) return showToast('Data tidak ditemukan. Coba refresh.', 'warning');
+
+    const status = String(r.status || 'pending').toLowerCase().trim();
+    const sm = { pending:{l:'Menunggu',c:'status-pending'}, accepted:{l:'Diterima',c:'status-accepted'}, progress:{l:'Diproses',c:'status-progress'}, pending_validation:{l:'Validasi Admin',c:'status-pending_validation'}, done:{l:'Selesai',c:'status-done'} };
+    const st = sm[status] || sm.pending;
+    const foto = r.foto && /^(https?:|data:image\/)/i.test(r.foto) ? r.foto : '';
+    const fotoLanjut = r.fotoTindakLanjut && /^(https?:|data:image\/)/i.test(r.fotoTindakLanjut) ? r.fotoTindakLanjut : '';
+    
+    const mapReq = r.lokasi && r.lokasi.includes(',') ? `<a href="https://www.google.com/maps?q=${r.lokasi}" target="_blank" style="color:var(--accent);text-decoration:none;"><i class="fas fa-map-marker-alt"></i> Buka Peta Lokasi Laporan</a>` : 'Tidak ada GPS';
+    const mapWork = r.lokasiPengerjaan && r.lokasiPengerjaan.includes(',') ? `<a href="https://www.google.com/maps?q=${r.lokasiPengerjaan}" target="_blank" style="color:var(--accent);text-decoration:none;"><i class="fas fa-map-marker-alt"></i> Buka Peta Lokasi Pengerjaan</a>` : 'Tidak ada GPS';
+    
+    let distanceHtml = '';
+    const c1 = parseCoords(r.lokasi), c2 = parseCoords(r.lokasiPengerjaan);
+    if(c1 && c2) {
+      const dist = haversine(c1, c2);
+      const isTooFar = dist > 10;
+      const warna = isTooFar ? 'var(--error)' : 'var(--success)';
+      distanceHtml = `<div style="margin-top:8px;padding:8px;border-radius:8px;background:rgba(255,255,255,0.05);font-size:0.8rem;">Jarak Laporan vs Pengerjaan: <strong style="color:${warna}">${Math.round(dist)} meter</strong> ${isTooFar?'⚠️ (Terlalu Jauh!)':'✓ (Sesuai)'}</div>`;
+    }
+
+    let actionHtml = '';
+    if (isStaffUser(currentUser) && status !== 'done' && status !== 'pending_validation') {
+      if (status === 'pending') actionHtml = `<button class="req-btn primary" onclick="updateRequestStatus('${strId}','accepted', true)" style="padding:14px;font-size:.9rem;">✓ Terima Tugas</button>`;
+      else if (status === 'accepted') actionHtml = `<button class="req-btn primary" onclick="updateRequestStatus('${strId}','progress', true)" style="padding:14px;font-size:.9rem;">▶ Mulai Kerjakan</button>`;
+      else if (status === 'progress') actionHtml = `<button class="req-btn success" onclick="closeModal('modalRequestDetail'); openCompleteWork('${strId}')" style="padding:14px;font-size:.9rem;">📸 Selesaikan & Lapor</button>`;
+    }
+    
+    if (isAdminUser(currentUser) && status === 'pending_validation') {
+      actionHtml = `
+        <div style="background:rgba(168,85,247,0.1);padding:15px;border-radius:12px;border:1px dashed #a855f7;margin-top:15px;">
+          <h4 style="color:#a855f7;margin-bottom:10px;font-size:0.9rem;"><i class="fas fa-shield-alt"></i> Area Validasi Admin</h4>
+          <p style="font-size:0.75rem;opacity:0.8;margin-bottom:10px;">Periksa foto & lokasi. Tolak jika tidak sesuai.</p>
+          <textarea id="adminCatatan" class="login-input" placeholder="Alasan jika ditolak..." rows="2" style="font-size:0.8rem;"></textarea>
+          <div style="display:flex;gap:8px;margin-top:10px;">
+            <button class="req-btn success" onclick="submitValidasi('${strId}', true)" style="padding:10px;">✓ Approve</button>
+            <button class="req-btn danger" onclick="submitValidasi('${strId}', false)" style="padding:10px;">✗ Reject</button>
+          </div>
+        </div>`;
+    }
+
+    document.getElementById('requestDetailBody').innerHTML = `
+      <div style="margin-bottom:15px;display:flex;justify-content:space-between;align-items:center;">
+        <span class="request-id">${escapeHTML(r.id)}</span>
+        <span class="request-status ${st.c}">${st.l}</span>
+      </div>
+      <div class="request-cat"><i class="fas fa-tag"></i> ${escapeHTML(r.kategori)}</div>
+      <h4 style="margin:8px 0;color:var(--title);font-size:1.1rem;">${escapeHTML(r.judul||r.kategori)}</h4>
+      <p style="font-size:.85rem;opacity:.85;line-height:1.6;margin-bottom:15px;white-space:pre-wrap;">${escapeHTML(r.deskripsi)}</p>
+      
+      ${foto ? `<div class="photo-container"><span class="photo-label"><i class="fas fa-camera"></i> Foto Laporan Awal</span><img src="${foto}" class="photo-preview" referrerpolicy="no-referrer" onerror="this.src='https://placehold.co/600x400/050810/ffffff?text=Foto+Gagal+Dimuat'"></div>` : ''}
+      ${fotoLanjut ? `<div class="photo-container" style="border-color:var(--success);"><span class="photo-label" style="color:var(--success);"><i class="fas fa-check-circle"></i> Foto Hasil Pengerjaan</span><img src="${fotoLanjut}" class="photo-preview" referrerpolicy="no-referrer" onerror="this.src='https://placehold.co/600x400/050810/ffffff?text=Foto+Gagal+Dimuat'"></div>` : ''}
+      
+      <div style="font-size:.82rem;line-height:2;margin:15px 0;background:rgba(255,255,255,0.02);padding:12px;border-radius:10px;border:1px solid var(--glass-border);">
+        <div><i class="fas fa-user" style="color:var(--accent);width:20px;"></i> <strong>Pelapor:</strong> ${escapeHTML(r.nama)}</div>
+        <div><i class="fas fa-map-marker-alt" style="color:var(--accent);width:20px;"></i> ${escapeHTML(r.alamat)}</div>
+        <div style="margin-top:5px;">${mapReq}</div>
+        ${r.timPetugas ? `<div style="margin-top:10px;border-top:1px dashed var(--glass-border);padding-top:10px;"><i class="fas fa-users" style="color:var(--success);width:20px;"></i> <strong>Tim Petugas:</strong> ${escapeHTML(r.timPetugas)}</div><div style="margin-top:2px;">${mapWork}</div>` : ''}
+        ${distanceHtml}
+        ${r.catatan ? `<div style="margin-top:10px;padding:8px;background:rgba(239,68,68,0.1);border-left:3px solid var(--error);font-size:0.8rem;border-radius:4px;">Catatan Admin: ${escapeHTML(r.catatan)}</div>` : ''}
+      </div>
+      
+      <h5 style="color:var(--title);margin:20px 0 10px;font-size:.9rem;font-weight:800;"> Alur Pengerjaan</h5>
+      <div class="workflow-steps">
+        <div class="workflow-step done"><div class="step-label">✓ Permintaan Dibuat</div></div>
+        <div class="workflow-step ${r.acceptedAt ? 'done' : (status==='pending'?'active':'')}"><div class="step-label">${r.acceptedAt?'✓':'○'} Diterima Petugas</div></div>
+        <div class="workflow-step ${r.progressAt ? 'done' : (status==='accepted'?'active':'')}"><div class="step-label">${r.progressAt?'✓':'○'} Dikerjakan</div></div>
+        <div class="workflow-step ${status==='pending_validation'?'active':(status==='done'?'done':'')}"><div class="step-label">${status==='done'?'✓':'●'} Validasi Admin</div></div>
+        <div class="workflow-step ${status==='done'?'done':''}"><div class="step-label">${status==='done'?'✓':'○'} Selesai</div></div>
+      </div>
+      ${actionHtml}
+    `;
+    document.getElementById('modalRequestDetail').style.display = 'flex';
+  } catch(err) { showToast('Error: ' + err.message, 'error'); }
+}
+
+async function submitValidasi(id, approved) {
+  const catatan = document.getElementById('adminCatatan')?.value.trim() || '';
+  if(!approved && !catatan) return showToast('Isi alasan penolakan!', 'warning');
+  
+  try {
+    const res = await apiCall({ action:'validateRequest', id, approved, catatanValidasi: catatan });
+    if(res.status !== 'success') throw new Error(res.message);
+    showToast(approved ? 'Pekerjaan disetujui & Selesai!' : 'Pekerjaan ditolak, dikembalikan ke petugas.', approved ? 'success' : 'warning');
+    closeModal('modalRequestDetail'); fetchRequests();
+  } catch(err) { showToast('Gagal: ' + err.message, 'error'); }
+}
+
+function openCompleteWork(id) {
+  document.getElementById('workRequestId').value = id;
+  const r = localRequests.find(x => String(x.id).trim() === String(id).trim());
+  document.getElementById('workDetailInfo').innerHTML = `Menyelesaikan: <strong>${escapeHTML(r?.kategori || '')}</strong> di ${escapeHTML(r?.alamat || '')}`;
+  document.getElementById('workTimPetugas').value = '';
+  resetResCam();
+  document.getElementById('modalCompleteWork').style.display = 'flex';
+  
+  const infoEl = document.getElementById('resLokasiInfo');
+  infoEl.innerHTML = '📍 Mendeteksi lokasi...'; infoEl.style.color = '';
+  getLocation().then(loc => {
+    infoEl.innerHTML = `📍 Lokasi terdeteksi. <a href="https://www.google.com/maps?q=${loc}" target="_blank" style="color:var(--accent);">[Lihat Peta]</a>`;
+    infoEl.dataset.lokasi = loc;
+  }).catch(() => {
+    infoEl.innerHTML = '⚠️ Gagal deteksi GPS. Aktifkan izin lokasi.';
+    infoEl.style.color = 'var(--error)';
+  });
+}
+function closeCompleteWork() { resetResCam(); document.getElementById('modalCompleteWork').style.display = 'none'; }
+
+async function startResCam() {
+  try {
+    resCamStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment', width: {ideal:1280} }, audio: false });
+    const v = document.getElementById('resCamVideo'); v.srcObject = resCamStream; v.style.display = 'block';
+    document.getElementById('resCamPlaceholder').style.display = 'none'; document.getElementById('resCamSnapshot').style.display = 'none';
+    document.getElementById('btnBukaResCam').style.display = 'none'; document.getElementById('btnAmbilResCam').style.display = 'flex'; document.getElementById('btnUlangiResCam').style.display = 'none';
+  } catch(err) { showToast('Kamera gagal: ' + err.message, 'error'); }
+}
+function captureResCam() {
+  const v = document.getElementById('resCamVideo'); if(!v.videoWidth) return showToast('Kamera belum siap', 'warning');
+  const cv = document.createElement('canvas'); cv.width = v.videoWidth; cv.height = v.videoHeight; cv.getContext('2d').drawImage(v,0,0);
+  resCamCaptured = cv.toDataURL('image/jpeg', 0.8);
+  document.getElementById('resCamSnapshot').src = resCamCaptured; document.getElementById('resCamSnapshot').style.display = 'block'; v.style.display = 'none';
+  if(resCamStream){ resCamStream.getTracks().forEach(t=>t.stop()); resCamStream = null; }
+  document.getElementById('btnAmbilResCam').style.display = 'none'; document.getElementById('btnUlangiResCam').style.display = 'flex';
+}
+function retakeResCam(){ resetResCam(); startResCam(); }
+function resetResCam() {
+  resCamCaptured = null; if(resCamStream){ resCamStream.getTracks().forEach(t=>t.stop()); resCamStream = null; }
+  const v = document.getElementById('resCamVideo'); if(v) v.style.display = 'none';
+  const s = document.getElementById('resCamSnapshot'); if(s) s.style.display = 'none';
+  const p = document.getElementById('resCamPlaceholder'); if(p) p.style.display = 'flex';
+  document.getElementById('btnBukaResCam').style.display = 'flex'; document.getElementById('btnAmbilResCam').style.display = 'none'; document.getElementById('btnUlangiResCam').style.display = 'none';
+  document.getElementById('resLokasiInfo').style.color = '';
+}
+
+async function submitWorkCompletion() {
+  const id = document.getElementById('workRequestId').value;
+  const timPetugas = document.getElementById('workTimPetugas').value.trim();
+  if(!timPetugas) return showToast('Isi nama tim petugas!', 'warning');
+  if(!resCamCaptured) return showToast('Ambil foto live hasil pengerjaan!', 'warning');
+  
+  const infoEl = document.getElementById('resLokasiInfo');
+  let lokasi = infoEl.dataset.lokasi || '';
+  if(!lokasi) { try { lokasi = await getLocation(); } catch(e) { return showToast('GPS wajib aktif!', 'error'); } }
+
+  try {
+    const res = await apiCall({
+      action: 'updateRequestStatus', id, status: 'pending_validation',
+      petugasId: currentUser?.petugasId || '', petugasName: currentUser?.nama || '',
+      fotoTindakLanjutBase64: resCamCaptured, timPetugas, lokasiPengerjaan: lokasi
+    });
+    if(res.status !== 'success') throw new Error(res.message);
+    showToast('Berhasil! Menunggu validasi Admin.', 'success', 5000);
+    closeCompleteWork(); fetchRequests();
+  } catch(err) { showToast('Gagal: ' + err.message, 'error'); }
+}
+
+/* ============ ABSENSI (EXISTING - TIDAK DIUBAH) ============ */
+function openAbsensi(){
+  if(!isStaffUser(currentUser)) return showToast('Hanya untuk petugas', 'warning');
+  document.getElementById('modalAbsensi').style.display = 'flex';
+  document.getElementById('absensiNamaPetugasInput').value = currentUser?.nama || '';
+  resetAbsensiCamera(); startClock(); fetchAbsensi();
+  pollTimers.absensi = setInterval(fetchAbsensi, 30000);
+}
+function closeAbsensiModal(){
+  document.getElementById('modalAbsensi').style.display = 'none';
+  clearInterval(pollTimers.absensi); clearInterval(pollTimers.clock); stopAbsensiCamera();
+}
+function startClock(){
+  clearInterval(pollTimers.clock);
+  const tick = () => { const el = document.getElementById('absensiClock'); if(!el) return; const now = new Date(); el.textContent = now.toLocaleTimeString('id-ID', { hour12:false }); const d = document.getElementById('absensiDate'); if(d) d.textContent = now.toLocaleDateString('id-ID', { weekday:'long', day:'2-digit', month:'long', year:'numeric' }); };
+  tick(); pollTimers.clock = setInterval(tick, 1000);
+}
+function resetAbsensiCamera() {
+  absensiCaptured = null; stopAbsensiCamera();
+  document.getElementById('absensiVideo').style.display = 'none'; document.getElementById('absensiSnapshot').style.display = 'none';
+  document.getElementById('cameraPlaceholder').style.display = 'flex'; document.getElementById('btnBukaKamera').style.display = 'flex';
+  document.getElementById('btnAmbilFoto').style.display = 'none'; document.getElementById('btnUlangiFoto').style.display = 'none';
+  document.getElementById('btnCheckIn').disabled = true; document.getElementById('btnCheckOut').disabled = true;
+}
+function stopAbsensiCamera() { if(absensiStream) { absensiStream.getTracks().forEach(t => t.stop()); absensiStream = null; } }
+async function startAbsensiCamera() {
+  try {
+    absensiStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: {ideal:640} }, audio: false });
+    const v = document.getElementById('absensiVideo'); v.srcObject = absensiStream; v.style.display = 'block';
+    document.getElementById('cameraPlaceholder').style.display = 'none'; document.getElementById('absensiSnapshot').style.display = 'none';
+    document.getElementById('btnBukaKamera').style.display = 'none'; document.getElementById('btnAmbilFoto').style.display = 'flex'; document.getElementById('btnUlangiFoto').style.display = 'none';
+  } catch(err) { showToast('Kamera gagal: ' + err.message, 'error'); }
+}
+function captureAbsensiPhoto() {
+  const v = document.getElementById('absensiVideo'); if(!v.videoWidth) return showToast('Kamera belum siap', 'warning');
+  const cv = document.createElement('canvas'); cv.width = v.videoWidth; cv.height = v.videoHeight; cv.getContext('2d').drawImage(v,0,0);
+  absensiCaptured = cv.toDataURL('image/jpeg', 0.8);
+  document.getElementById('absensiSnapshot').src = absensiCaptured; document.getElementById('absensiSnapshot').style.display = 'block'; v.style.display = 'none';
+  stopAbsensiCamera(); document.getElementById('btnAmbilFoto').style.display = 'none'; document.getElementById('btnUlangiFoto').style.display = 'flex';
+  
+  const today = new Date().toISOString().split('T')[0];
+  const mine = localAbsensi.find(a => String(a.petugasId) === String(currentUser?.petugasId) && a.tanggal === today);
+  if(mine && mine.jamMasuk && !mine.jamKeluar) { document.getElementById('btnCheckIn').disabled = true; document.getElementById('btnCheckOut').disabled = false; }
+  else if(!mine) { document.getElementById('btnCheckIn').disabled = false; document.getElementById('btnCheckOut').disabled = true; }
+}
+function retakeAbsensiPhoto() { resetAbsensiCamera(); startAbsensiCamera(); }
+async function fetchAbsensi(){ try{ const res = await apiGet({ action:'getAbsensi', petugasId: currentUser?.petugasId || '' }); if(res.status === 'success'){ localAbsensi = res.data || []; renderAbsensi(); } }catch(e){} }
+function renderAbsensi(){
+  const today = new Date().toISOString().split('T')[0], mine = localAbsensi.find(a => String(a.petugasId) === String(currentUser?.petugasId) && a.tanggal === today);
+  const btnIn = document.getElementById('btnCheckIn'), btnOut = document.getElementById('btnCheckOut'), status = document.getElementById('absensiStatus');
+  if(mine && mine.jamMasuk){ btnIn.disabled = true; if(!absensiCaptured) btnOut.disabled = true; status.innerHTML = `<i class="fas fa-check-circle" style="color:var(--success);"></i> Masuk: <strong>${escapeHTML(mine.jamMasuk)}</strong>${mine.jamKeluar ? ` • Keluar: <strong>${escapeHTML(mine.jamKeluar)}</strong>` : ''}`; }
+  else { if(!absensiCaptured) btnIn.disabled = true; btnOut.disabled = true; status.textContent = 'Belum absen hari ini'; }
+  
+  const log = document.getElementById('absensiLog'), list = isAdminUser(currentUser) ? localAbsensi.slice(0,20) : localAbsensi.filter(a => String(a.petugasId) === String(currentUser?.petugasId)).slice(0,10);
+  log.innerHTML = list.length ? list.map(a => {
+    let mapIn = a.lokasiMasuk?.includes(',') ? `<a href="https://www.google.com/maps?q=${a.lokasiMasuk}" target="_blank" style="color:var(--accent);text-decoration:none;font-size:.75rem;"><i class="fas fa-map-marker-alt"></i> Peta</a>` : '';
+    let mapOut = a.lokasiKeluar?.includes(',') ? `<a href="https://www.google.com/maps?q=${a.lokasiKeluar}" target="_blank" style="color:var(--accent);text-decoration:none;font-size:.75rem;"><i class="fas fa-map-marker-alt"></i> Peta</a>` : '';
+    const fotoIn = a.fotoMasuk?.includes('http') ? `<img src="${a.fotoMasuk}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid var(--success);" referrerpolicy="no-referrer" onerror="this.src='https://placehold.co/40x40/050810/ffffff?text=?'">` : '';
+    const fotoOut = a.fotoKeluar?.includes('http') ? `<img src="${a.fotoKeluar}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid var(--error);" referrerpolicy="no-referrer" onerror="this.src='https://placehold.co/40x40/050810/ffffff?text=?'">` : '';
+    return `<div class="absensi-row" style="flex-direction:column;align-items:flex-start;padding:15px;background:rgba(255,255,255,0.02);margin-bottom:8px;border-radius:10px;border:none;">
+      <div style="display:flex;justify-content:space-between;width:100%;margin-bottom:8px;"><strong>${escapeHTML(a.petugasName||a.petugasId)}</strong><span style="font-size:.75rem;opacity:.6;">${escapeHTML(a.tanggal)}</span></div>
+      <div style="display:flex;width:100%;justify-content:space-between;align-items:center;border-top:1px solid var(--glass-border);padding-top:8px;">
+        <div style="display:flex;align-items:center;gap:10px;">${fotoIn}<div><div style="font-size:.8rem;color:var(--success);font-weight:bold;">Masuk: ${escapeHTML(a.jamMasuk||'-')}</div>${mapIn}</div></div>
+        <div style="display:flex;align-items:center;gap:10px;"><div style="text-align:right;"><div style="font-size:.8rem;color:var(--error);font-weight:bold;">Keluar: ${escapeHTML(a.jamKeluar||'-')}</div>${mapOut}</div>${fotoOut}</div>
+      </div>
+    </div>`;
+  }).join('') : '<div style="text-align:center;padding:15px;opacity:.5;">Belum ada data</div>';
+}
+async function doCheckIn(){
+  if(!currentUser?.petugasId) return showToast('Login sebagai petugas', 'error');
+  if(!absensiCaptured) return showToast('Wajib ambil foto selfie terlebih dahulu!', 'warning');
+  
+  const namaPetugas = document.getElementById('absensiNamaPetugasInput').value.trim();
+  if(!namaPetugas) return showToast('Isi Nama Petugas terlebih dahulu!', 'warning');
+
+  const btn = document.getElementById('btnCheckIn'); const orig = btn.innerHTML; btn.innerHTML = 'Memproses...'; btn.disabled = true;
+  try{
+    let lokasi = ''; try{ lokasi = await getLocation(); }catch(e){ throw new Error('Gagal GPS.'); }
+    const res = await apiCall({ action:'checkIn', petugasId: currentUser.petugasId, petugasName: namaPetugas, lokasi, fotoBase64: absensiCaptured });
+    if(res.status !== 'success') throw new Error(res.message);
+    showToast('Absen masuk berhasil!', 'success'); resetAbsensiCamera(); fetchAbsensi();
+  }catch(err){ showToast('Gagal: ' + err.message, 'error'); } finally{ btn.innerHTML = orig; btn.disabled = false; }
+}
+async function doCheckOut(){
+  if(!currentUser?.petugasId) return showToast('Login sebagai petugas', 'error');
+  if(!absensiCaptured) return showToast('Wajib ambil foto selfie terlebih dahulu!', 'warning');
+  
+  const namaPetugas = document.getElementById('absensiNamaPetugasInput').value.trim();
+  if(!namaPetugas) return showToast('Isi Nama Petugas terlebih dahulu!', 'warning');
+
+  const btn = document.getElementById('btnCheckOut'); const orig = btn.innerHTML; btn.innerHTML = 'Memproses...'; btn.disabled = true;
+  try{
+    let lokasi = ''; try{ lokasi = await getLocation(); }catch(e){ throw new Error('Gagal GPS.'); }
+    const res = await apiCall({ action:'checkOut', petugasId: currentUser.petugasId, lokasi, fotoBase64: absensiCaptured });
+    if(res.status !== 'success') throw new Error(res.message);
+    showToast('Absen keluar berhasil!', 'success'); resetAbsensiCamera(); fetchAbsensi();
+  }catch(err){ showToast('Gagal: ' + err.message, 'error'); } finally{ btn.innerHTML = orig; btn.disabled = false; }
+}
+
+/* ============ JADWAL (EXISTING - TIDAK DIUBAH) ============ */
+async function openJadwal(){ document.getElementById('modalJadwal').style.display = 'flex'; await fetchJadwal(); }
+async function fetchJadwal(){
+  const tbody = document.querySelector('#jadwalTable tbody'); if(tbody) tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:30px;">Memuat...</td></tr>';
+  try{ const res = await apiGet({ action:'getJadwal' }); if(res.status === 'success'){ localJadwal = res.data || []; renderJadwal(); populatePetugasFilter(); } }
+  catch(e){ if(tbody) tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--error);">Gagal memuat</td></tr>'; }
+}
+function populatePetugasFilter(){
+  const sel = document.getElementById('jadwalPetugasFilter'); if(!sel) return;
+  const names = [...new Set(localJadwal.map(j => j.petugasName).filter(Boolean))]; const cur = sel.value;
+  sel.innerHTML = '<option value="">Semua Petugas</option>' + names.map(n => `<option ${n===cur?'selected':''}>${escapeHTML(n)}</option>`).join('');
+}
+function renderJadwal(){
+  const tbody = document.querySelector('#jadwalTable tbody'); if(!tbody) return;
+  const fp = document.getElementById('jadwalPetugasFilter')?.value || '', fs = document.getElementById('jadwalShiftFilter')?.value || '';
+  const today = new Date().toISOString().split('T')[0];
+  const filtered = localJadwal.filter(j => (!fp || j.petugasName === fp) && (!fs || j.shift === fs)).sort((a,b) => String(a.tanggal||'').localeCompare(String(b.tanggal||'')));
+  if(filtered.length === 0){ tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:30px;">Tidak ada jadwal</td></tr>'; return; }
+  tbody.innerHTML = filtered.map(j => {
+    const d = j.tanggal ? new Date(j.tanggal) : null; const hari = d && !isNaN(d) ? d.toLocaleDateString('id-ID',{weekday:'long'}) : '-';
+    const tgl = d && !isNaN(d) ? d.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'}) : (j.tanggal||'-');
+    const isToday = j.tanggal === today; const sc = String(j.shift||'').toLowerCase().includes('pagi') ? 'shift-pagi' : String(j.shift||'').toLowerCase().includes('siang') ? 'shift-siang' : 'shift-malam';
+    return `<tr class="${isToday?'today-row':''}"><td>${isToday?'<strong style="color:var(--accent);">Hari Ini</strong>':escapeHTML(hari)}</td><td>${escapeHTML(tgl)}</td><td><span class="shift-badge ${sc}">${escapeHTML(j.shift||'-')}</span></td><td>${escapeHTML(j.petugasName||'-')}</td><td>${escapeHTML(j.area||'-')}</td></tr>`;
+  }).join('');
+}
+document.getElementById('jadwalPetugasFilter')?.addEventListener('change', renderJadwal);
+document.getElementById('jadwalShiftFilter')?.addEventListener('change', renderJadwal);
+
+function openManajemenRequest(){
+  if(!isStaffUser(currentUser)) return showToast('Akses terbatas', 'error');
+  document.getElementById('modalManajemen').style.display = 'flex'; const body = document.getElementById('manajemenBody');
+  const counts = { pending:0, accepted:0, progress:0, pending_validation:0, done:0 };
+  localRequests.forEach(r => { const s = String(r.status||'').toLowerCase().trim(); if(counts[s] !== undefined) counts[s]++; });
+  body.innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px;">
+      <div style="background:rgba(239,68,68,.1);padding:14px;border-radius:12px;text-align:center;"><div style="font-size:1.5rem;font-weight:900;color:var(--error);">${counts.pending}</div><div style="font-size:.7rem;opacity:.7;">Menunggu</div></div>
+      <div style="background:rgba(245,158,11,.1);padding:14px;border-radius:12px;text-align:center;"><div style="font-size:1.5rem;font-weight:900;color:var(--warning);">${counts.accepted}</div><div style="font-size:.7rem;opacity:.7;">Diterima</div></div>
+      <div style="background:rgba(56,189,248,.1);padding:14px;border-radius:12px;text-align:center;"><div style="font-size:1.5rem;font-weight:900;color:#38bdf8;">${counts.progress}</div><div style="font-size:.7rem;opacity:.7;">Diproses</div></div>
+      <div style="background:rgba(168,85,247,.1);padding:14px;border-radius:12px;text-align:center;"><div style="font-size:1.5rem;font-weight:900;color:#a855f7;">${counts.pending_validation}</div><div style="font-size:.7rem;opacity:.7;">Validasi Admin</div></div>
+      <div style="background:rgba(16,185,129,.1);padding:14px;border-radius:12px;text-align:center;"><div style="font-size:1.5rem;font-weight:900;color:var(--success);">${counts.done}</div><div style="font-size:.7rem;opacity:.7;">Selesai</div></div>
+    </div>
+  `;
+}
+
+function openApp(e, url, name){ if(e) e.preventDefault(); document.getElementById('viewer-title').innerText = name || 'APPIS'; document.getElementById('app-iframe').src = url; document.getElementById('app-viewer').style.display = 'flex'; }
+function closeApp(){ document.getElementById('app-viewer').style.display = 'none'; document.getElementById('app-iframe').src = ''; }
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'Escape'){
+    ['modalAddInfo','modalRequestForm','modalRequestDetail','modalJadwal','modalManajemen','modalCompleteWork','modalLaporanDetail','modalConfirmLogout'].forEach(id => { const m = document.getElementById(id); if(m && m.style.display === 'flex') m.style.display = 'none'; });
+    if(document.getElementById('modalLaporanKerjaForm').style.display === 'flex') closeLaporanKerjaForm();
+    if(document.getElementById('modalAbsensi').style.display === 'flex') closeAbsensiModal();
+    if(document.getElementById('app-viewer').style.display === 'flex') closeApp();
+  }
+});
+window.addEventListener('online',  () => showToast('Kembali online', 'success'));
+window.addEventListener('offline', () => showToast('Anda offline', 'warning', 6000));
+</script>
+</body>
+</html>
